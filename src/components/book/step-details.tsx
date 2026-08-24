@@ -16,7 +16,7 @@ export function StepDetails() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-serif text-3xl font-semibold text-plum-deep">
+        <h1 className="font-serif text-3xl font-medium text-plum-deep">
           Your details
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -41,7 +41,7 @@ export function StepDetails() {
             id="client-phone"
             type="tel"
             autoComplete="tel"
-            placeholder="+1 (440) 544-5757"
+            placeholder="+1 (424) 666-2911"
             value={client.phone}
             onChange={(e) => patchClient({ phone: e.target.value })}
           />
@@ -92,7 +92,7 @@ export function StepDetails() {
                 className={cn(
                   "h-11 rounded-full text-sm font-medium transition-[box-shadow]",
                   client.preferredContact === opt.id
-                    ? "bg-plum text-primary-foreground"
+                    ? "bg-champagne text-primary-foreground"
                     : "bg-card text-foreground shadow-[0_0_0_1px_var(--color-border)]",
                 )}
               >
@@ -113,7 +113,7 @@ export function StepDetails() {
         </div>
       </div>
 
-      <p className="rounded-xl bg-cream-deep/70 px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
+      <p className="rounded-xl bg-white/5 px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
         Your information is kept private and is used only to manage your
         appointment.
       </p>
