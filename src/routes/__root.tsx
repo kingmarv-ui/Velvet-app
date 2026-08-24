@@ -2,6 +2,7 @@ import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-r
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { Toaster } from "sonner";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Velvetmoon Spa";
@@ -49,6 +50,7 @@ export const Route = createRootRoute({
               "font-sans !bg-card !text-foreground !border-border !shadow-[var(--shadow-border)]",
           }}
         />
+        <SpeedInsights />
         <Scripts />
       </body>
     </html>
