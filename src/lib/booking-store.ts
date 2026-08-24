@@ -1,13 +1,17 @@
 import { create } from "zustand";
 import { getService, spa, type Service } from "./spa-config";
-import { generateBookingId, totalDuration, totalPrice } from "./availability";
+import { generateBookingId, totalPrice } from "./availability";
 
-export type PaymentMethod = "card" | "transfer";
+export type PaymentMethod = "card" | "transfer" | "mobile";
+export type LocationType = "incall" | "outcall";
+export type PreferredContact = "phone" | "whatsapp" | "email";
 
 export type ClientDetails = {
   name: string;
   phone: string;
   email: string;
+  address: string;
+  preferredContact: PreferredContact;
   notes: string;
 };
 
@@ -25,6 +29,8 @@ export type SavedBooking = {
   services: { id: string; name: string; durationMin: number; price: number }[];
   date: string;
   time: string;
+  durationHours: number;
+  locationType: LocationType;
   client: ClientDetails;
   paymentMethod: PaymentMethod;
   depositOnly: boolean;
@@ -38,6 +44,8 @@ const emptyClient: ClientDetails = {
   name: "",
   phone: "",
   email: "",
+  address: "",
+  preferredContact: "whatsapp",
   notes: "",
 };
 
@@ -52,21 +60,27 @@ type BookingState = {
   selectedIds: string[];
   date: string | null;
   time: string | null;
+  durationHours: number;
+  locationType: LocationType | null;
   client: ClientDetails;
   paymentMethod: PaymentMethod;
   depositOnly: boolean;
   card: CardDetails;
   transferAcknowledged: boolean;
+  policyAccepted: boolean;
   lastBookingId: string | null;
-  toggleService: (id: string) => void;
+  selectService: (id: string) => void;
   setSelected: (ids: string[]) => void;
   setDate: (iso: string | null) => void;
   setTime: (time: string | null) => void;
+  setDurationHours: (hours: number) => void;
+  setLocationType: (loc: LocationType) => void;
   patchClient: (patch: Partial<ClientDetails>) => void;
   setPaymentMethod: (method: PaymentMethod) => void;
   setDepositOnly: (value: boolean) => void;
   patchCard: (patch: Partial<CardDetails>) => void;
   setTransferAcknowledged: (value: boolean) => void;
+  setPolicyAccepted: (value: boolean) => void;
   confirmBooking: () => SavedBooking | null;
   resetFlow: () => void;
 };
@@ -100,28 +114,28 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   selectedIds: [],
   date: null,
   time: null,
+  durationHours: 1,
+  locationType: null,
   client: emptyClient,
   paymentMethod: "card",
   depositOnly: true,
   card: emptyCard,
   transferAcknowledged: false,
+  policyAccepted: false,
   lastBookingId: null,
 
-  toggleService: (id) =>
-    set((state) => {
-      const exists = state.selectedIds.includes(id);
-      return {
-        selectedIds: exists
-          ? state.selectedIds.filter((x) => x !== id)
-          : [...state.selectedIds, id],
-      };
-    }),
+  selectService: (id) => set({ selectedIds: [id] }),
 
   setSelected: (ids) => set({ selectedIds: ids }),
 
   setDate: (iso) => set({ date: iso, time: null }),
 
   setTime: (time) => set({ time }),
+
+  setDurationHours: (hours) =>
+    set({ durationHours: Math.min(spa.maxDurationHours, Math.max(1, hours)) }),
+
+  setLocationType: (loc) => set({ locationType: loc }),
 
   patchClient: (patch) =>
     set((state) => ({ client: { ...state.client, ...patch } })),
@@ -134,14 +148,19 @@ export const useBookingStore = create<BookingState>((set, get) => ({
 
   setTransferAcknowledged: (value) => set({ transferAcknowledged: value }),
 
+  setPolicyAccepted: (value) => set({ policyAccepted: value }),
+
   confirmBooking: () => {
     const state = get();
     const services = selectedServices(state.selectedIds);
-    if (!services.length || !state.date || !state.time) return null;
+    if (!services.length || !state.date || !state.time || !state.locationType) return null;
     if (!state.client.name.trim() || !state.client.phone.trim() || !state.client.email.trim()) {
       return null;
     }
+    if (state.locationType === "outcall" && !state.client.address.trim()) return null;
+    if (!state.policyAccepted) return null;
 
+    const durationMin = state.durationHours * 60;
     const total = totalPrice(services);
     const paid = state.depositOnly
       ? Math.round(total * (spa.depositPercent / 100))
@@ -154,11 +173,13 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       services: services.map((s) => ({
         id: s.id,
         name: s.name,
-        durationMin: s.durationMin,
+        durationMin,
         price: s.price,
       })),
       date: state.date,
       time: state.time,
+      durationHours: state.durationHours,
+      locationType: state.locationType,
       client: { ...state.client },
       paymentMethod: state.paymentMethod,
       depositOnly: state.depositOnly,
@@ -176,17 +197,20 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       selectedIds: [],
       date: null,
       time: null,
+      durationHours: 1,
+      locationType: null,
       client: emptyClient,
       paymentMethod: "card",
       depositOnly: true,
       card: emptyCard,
       transferAcknowledged: false,
+      policyAccepted: false,
     }),
 }));
 
-export function bookingTotals(ids: string[], depositOnly: boolean) {
+export function bookingTotals(ids: string[], depositOnly: boolean, durationHours?: number) {
   const services = selectedServices(ids);
-  const duration = totalDuration(services);
+  const duration = durationHours ? durationHours * 60 : services.reduce((s, x) => s + x.durationMin, 0);
   const total = totalPrice(services);
   const deposit = Math.round(total * (spa.depositPercent / 100));
   const dueNow = depositOnly ? deposit : total;
