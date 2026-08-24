@@ -14,7 +14,8 @@ export function ServiceCard({
   onSelect: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const long = service.description.length > 118;
+  const hasHighlights = Boolean(service.highlights?.length);
+  const long = service.description.length > 118 || hasHighlights;
 
   return (
     <article
@@ -41,13 +42,23 @@ export function ServiceCard({
       >
         {service.description}
       </p>
+      {expanded && hasHighlights ? (
+        <ul className="mt-3 space-y-1.5 text-sm text-foreground/85">
+          {service.highlights!.map((item) => (
+            <li key={item} className="flex gap-2">
+              <span className="mt-2 size-1 shrink-0 rounded-full bg-champagne" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
       {long ? (
         <button
           type="button"
           className="mt-1 min-h-8 text-sm font-medium text-plum"
           onClick={() => setExpanded((v) => !v)}
         >
-          {expanded ? "Show less" : "Show more"}
+          {expanded ? "Show less" : "Session highlights"}
         </button>
       ) : null}
       <div className="mt-4 flex items-center justify-between gap-3">
