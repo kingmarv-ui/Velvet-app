@@ -1,34 +1,73 @@
-import { ServiceCard } from "@/components/spa/service-card";
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { services } from "@/lib/spa-config";
 import { useBookingStore } from "@/lib/booking-store";
+import { cn, formatDuration, formatPrice } from "@/lib/utils";
 
 export function StepServices() {
   const selectedIds = useBookingStore((s) => s.selectedIds);
-  const toggleService = useBookingStore((s) => s.toggleService);
+  const selectService = useBookingStore((s) => s.selectService);
+  const selected = selectedIds[0];
 
   return (
     <div>
       <h1 className="font-serif text-3xl font-semibold text-plum-deep">
-        Choose your treatment
+        Select your massage
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-        Select one or more services. Duration and price will combine in your
-        summary.
+        Choose one service to continue. You can review everything before payment.
       </p>
-      {selectedIds.length === 0 ? (
-        <p className="mt-5 rounded-xl bg-cream-deep/70 px-4 py-3 text-sm text-muted-foreground">
-          Nothing selected yet — tap Select on a treatment to add it.
-        </p>
-      ) : null}
-      <div className="mt-5 flex flex-col gap-3">
-        {services.map((service) => (
-          <ServiceCard
-            key={service.id}
-            service={service}
-            selected={selectedIds.includes(service.id)}
-            onSelect={() => toggleService(service.id)}
-          />
-        ))}
+      <div className="mt-6 flex flex-col gap-3">
+        {services.map((service) => {
+          const isSelected = selected === service.id;
+          return (
+            <article
+              key={service.id}
+              className={cn(
+                "soft-card p-4 transition-[box-shadow] duration-150",
+                isSelected && "shadow-[0_0_0_1.5px_var(--color-plum),var(--shadow-border)]",
+              )}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="font-serif text-xl font-semibold text-plum-deep">
+                    {service.name}
+                  </h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {service.id === "executive-private"
+                      ? "Extended"
+                      : formatDuration(service.durationMin)}{" "}
+                    — {formatPrice(service.price)}
+                  </p>
+                </div>
+                {service.featured ? (
+                  <span className="shrink-0 rounded-full bg-champagne-light/70 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-plum uppercase">
+                    Signature
+                  </span>
+                ) : null}
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {service.description}
+              </p>
+              <Button
+                type="button"
+                variant={isSelected ? "default" : "outline"}
+                size="sm"
+                className="mt-4"
+                onClick={() => selectService(service.id)}
+              >
+                {isSelected ? (
+                  <>
+                    <Check className="size-3.5" />
+                    Selected
+                  </>
+                ) : (
+                  "Select this service"
+                )}
+              </Button>
+            </article>
+          );
+        })}
       </div>
     </div>
   );
