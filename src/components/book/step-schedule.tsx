@@ -43,7 +43,7 @@ export function StepSchedule() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-serif text-3xl font-semibold text-plum-deep">
+        <h1 className="font-serif text-3xl font-medium text-plum-deep">
           Choose your appointment
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -87,7 +87,7 @@ export function StepSchedule() {
               className={cn(
                 "flex min-h-14 flex-col items-start justify-center rounded-2xl px-4 py-3 text-left transition-[box-shadow]",
                 durationHours === h
-                  ? "bg-card shadow-[0_0_0_1.5px_var(--color-plum)]"
+                  ? "bg-card shadow-[0_0_0_1.5px_var(--color-champagne)]"
                   : "bg-card shadow-[var(--shadow-border)]",
               )}
             >
@@ -114,7 +114,7 @@ export function StepSchedule() {
             className={cn(
               "flex min-h-16 flex-col items-start justify-center rounded-2xl px-4 py-3 text-left transition-[box-shadow]",
               locationType === "incall"
-                ? "bg-card shadow-[0_0_0_1.5px_var(--color-plum)]"
+                ? "bg-card shadow-[0_0_0_1.5px_var(--color-champagne)]"
                 : "bg-card shadow-[var(--shadow-border)]",
             )}
           >
@@ -129,7 +129,7 @@ export function StepSchedule() {
             className={cn(
               "flex min-h-16 flex-col items-start justify-center rounded-2xl px-4 py-3 text-left transition-[box-shadow]",
               locationType === "outcall"
-                ? "bg-card shadow-[0_0_0_1.5px_var(--color-plum)]"
+                ? "bg-card shadow-[0_0_0_1.5px_var(--color-champagne)]"
                 : "bg-card shadow-[var(--shadow-border)]",
             )}
           >
@@ -172,9 +172,9 @@ export function StepSchedule() {
                   "h-11 rounded-full text-sm font-medium transition-[box-shadow,background-color]",
                   slot.available
                     ? time === slot.time
-                      ? "bg-plum text-primary-foreground"
-                      : "bg-card text-foreground shadow-[0_0_0_1px_var(--color-border)] hover:shadow-[0_0_0_1px_var(--color-plum)]"
-                    : "cursor-not-allowed bg-cream-deep/60 text-muted-foreground/50 line-through",
+                      ? "bg-champagne text-primary-foreground"
+                      : "bg-card text-foreground shadow-[0_0_0_1px_var(--color-border)] hover:shadow-[0_0_0_1px_var(--color-champagne)]"
+                    : "cursor-not-allowed bg-white/5 text-muted-foreground/50 line-through",
                 )}
               >
                 {formatTimeDisplay(slot.time)}
