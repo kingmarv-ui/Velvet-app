@@ -36,8 +36,12 @@ export function LandingPage() {
             <p className="mx-auto mt-3 max-w-xs text-base leading-relaxed text-muted-foreground">
               {spa.tagline}
             </p>
+            <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
+              Select your preferred massage, choose an available appointment
+              time, and securely complete your booking.
+            </p>
             <Button asChild size="lg" className="mt-7 min-w-40">
-              <Link to="/book">Book now</Link>
+              <Link to="/book">Book Your Private Massage</Link>
             </Button>
           </section>
 
