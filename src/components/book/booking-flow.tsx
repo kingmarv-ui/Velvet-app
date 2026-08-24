@@ -28,7 +28,6 @@ export function BookingFlow() {
   const client = useBookingStore((s) => s.client);
   const paymentMethod = useBookingStore((s) => s.paymentMethod);
   const depositOnly = useBookingStore((s) => s.depositOnly);
-  const card = useBookingStore((s) => s.card);
   const transferAcknowledged = useBookingStore((s) => s.transferAcknowledged);
   const policyAccepted = useBookingStore((s) => s.policyAccepted);
   const confirmBooking = useBookingStore((s) => s.confirmBooking);
@@ -49,7 +48,7 @@ export function BookingFlow() {
               client.address,
               locationType,
             )
-          : paymentReady(paymentMethod, card, transferAcknowledged) &&
+          : paymentReady(paymentMethod, transferAcknowledged) &&
             policyAccepted;
 
   function goBack() {
@@ -95,12 +94,12 @@ export function BookingFlow() {
 
   return (
     <div className="page-shell">
-      <header className="sticky top-0 z-30 border-b border-plum/8 bg-cream/85 backdrop-blur-md">
+      <header className="sticky top-0 z-30 border-b border-white/8 bg-[#100e12]/75 backdrop-blur-xl">
         <div className="narrow flex h-14 items-center justify-between px-3">
           <button
             type="button"
             onClick={goBack}
-            className="inline-flex min-h-11 items-center gap-1 px-2 text-sm font-medium text-plum"
+            className="inline-flex min-h-11 items-center gap-1 px-2 text-sm font-medium text-champagne"
           >
             <ChevronLeft className="size-4" />
             Back
@@ -125,7 +124,7 @@ export function BookingFlow() {
         </div>
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-plum/10 bg-cream/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-[#100e12]/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
         <div className="narrow flex items-center justify-between gap-3 px-5 py-3">
           <div className="min-w-0">
             <p className="text-sm font-medium tabular-nums text-plum-deep">

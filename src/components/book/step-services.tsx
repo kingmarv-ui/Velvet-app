@@ -11,7 +11,7 @@ export function StepServices() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl font-semibold text-plum-deep">
+      <h1 className="font-serif text-3xl font-medium text-plum-deep">
         Select your massage
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -25,7 +25,7 @@ export function StepServices() {
               key={service.id}
               className={cn(
                 "soft-card p-4 transition-[box-shadow] duration-150",
-                isSelected && "shadow-[0_0_0_1.5px_var(--color-plum),var(--shadow-border)]",
+                isSelected && "shadow-[0_0_0_1.5px_var(--color-champagne),var(--shadow-border-hover)]",
               )}
             >
               <div className="flex items-start justify-between gap-3">
@@ -41,7 +41,7 @@ export function StepServices() {
                   </p>
                 </div>
                 {service.featured ? (
-                  <span className="shrink-0 rounded-full bg-champagne-light/70 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-plum uppercase">
+                  <span className="shrink-0 rounded-full bg-champagne/15 px-2.5 py-0.5 text-[0.65rem] font-medium tracking-[0.12em] text-champagne uppercase">
                     Signature
                   </span>
                 ) : null}
