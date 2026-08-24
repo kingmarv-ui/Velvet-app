@@ -112,11 +112,14 @@
     position: relative;
     isolation: isolate;
     min-height: 100dvh;
-    background:
-      radial-gradient(900px 500px at 15% -5%, rgba(139, 74, 107, 0.18), transparent 55%),
-      radial-gradient(700px 480px at 95% 5%, rgba(201, 163, 106, 0.08), transparent 50%),
-      radial-gradient(600px 400px at 50% 100%, rgba(139, 74, 107, 0.1), transparent 55%),
-      var(--color-background);
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(ellipse 80% 55% at 8% -8%, rgba(139, 74, 107, 0.28), transparent 58%),
+      radial-gradient(ellipse 70% 50% at 100% 0%, rgba(201, 163, 106, 0.14), transparent 52%),
+      radial-gradient(ellipse 60% 40% at 50% 42%, rgba(80, 48, 70, 0.22), transparent 70%),
+      radial-gradient(ellipse 90% 50% at 50% 110%, rgba(139, 74, 107, 0.16), transparent 55%),
+      radial-gradient(ellipse 40% 30% at 0% 70%, rgba(201, 163, 106, 0.06), transparent 60%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.45) 100%);
   }
 
   .page-shell::before {
@@ -125,9 +128,26 @@
     position: fixed;
     inset: 0;
     z-index: 40;
-    opacity: 0.035;
+    opacity: 0.045;
     mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .page-shell::after {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(circle 180px at 12% 28%, rgba(201, 163, 106, 0.07), transparent 70%),
+      radial-gradient(circle 220px at 88% 62%, rgba(139, 74, 107, 0.1), transparent 70%),
+      radial-gradient(circle 140px at 70% 18%, rgba(201, 163, 106, 0.05), transparent 70%);
+  }
+
+  .page-shell > * {
+    position: relative;
+    z-index: 1;
   }
 
   .narrow {
