@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 
 export function LandingPage() {
   const selectedIds = useBookingStore((s) => s.selectedIds);
-  const toggleService = useBookingStore((s) => s.toggleService);
+  const selectService = useBookingStore((s) => s.selectService);
   const selectedCount = selectedIds.length;
 
   return (
@@ -27,10 +27,10 @@ export function LandingPage() {
       <div className={cn(selectedCount > 0 && "pb-24")}>
         <SiteHeader />
         <main className="narrow px-5">
-          <section className="stagger-in pt-10 pb-8 text-center">
+          <section className="stagger-in pt-14 pb-12 text-center">
             <MoonMark className="mx-auto size-12" />
             <p className="section-label mt-6">Private wellness</p>
-            <h1 className="mt-3 font-serif text-4xl font-semibold text-plum-deep sm:text-5xl">
+            <h1 className="mt-4 font-serif text-4xl font-medium tracking-tight text-plum-deep sm:text-5xl">
               {spa.name}
             </h1>
             <p className="mx-auto mt-3 max-w-xs text-base leading-relaxed text-muted-foreground">
@@ -182,7 +182,7 @@ export function LandingPage() {
               Treatments
             </h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              Select one or several. You can still change this in the next step.
+              Choose a treatment below, or start the full booking flow.
             </p>
             <div className="mt-5 flex flex-col gap-3">
               {services.map((service) => (
@@ -190,7 +190,7 @@ export function LandingPage() {
                   key={service.id}
                   service={service}
                   selected={selectedIds.includes(service.id)}
-                  onSelect={() => toggleService(service.id)}
+                  onSelect={() => selectService(service.id)}
                 />
               ))}
             </div>
@@ -200,7 +200,7 @@ export function LandingPage() {
       </div>
 
       {selectedCount > 0 ? (
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-plum/10 bg-cream/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-[#100e12]/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
           <div className="narrow flex items-center justify-between gap-3 px-5 py-3">
             <div className="min-w-0">
               <p className="text-sm font-medium text-plum-deep">
