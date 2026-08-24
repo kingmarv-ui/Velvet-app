@@ -2,9 +2,10 @@ import { create } from "zustand";
 import { getService, spa, type Service } from "./spa-config";
 import { generateBookingId, totalPrice } from "./availability";
 
-export type PaymentMethod = "card" | "transfer" | "mobile";
+export type PaymentMethod = "transfer" | "mobile";
 export type LocationType = "incall" | "outcall";
 export type PreferredContact = "phone" | "whatsapp" | "email";
+export type BookingStatus = "pending" | "confirmed" | "rejected";
 
 export type ClientDetails = {
   name: string;
@@ -36,6 +37,8 @@ export type SavedBooking = {
   depositOnly: boolean;
   total: number;
   paid: number;
+  status: BookingStatus;
+  proofDataUrl?: string | null;
 };
 
 const BOOKINGS_KEY = "velvetmoon-bookings";
@@ -105,9 +108,25 @@ export function loadBooking(id: string): SavedBooking | undefined {
   return loadBookings().find((b) => b.id === id);
 }
 
-function persistBooking(booking: SavedBooking) {
-  const all = [booking, ...loadBookings().filter((b) => b.id !== booking.id)].slice(0, 30);
+export function persistBooking(booking: SavedBooking) {
+  const all = [booking, ...loadBookings().filter((b) => b.id !== booking.id)].slice(0, 50);
   window.localStorage.setItem(BOOKINGS_KEY, JSON.stringify(all));
+}
+
+export function updateBookingStatus(
+  id: string,
+  status: BookingStatus,
+  proofDataUrl?: string | null,
+): SavedBooking | null {
+  const existing = loadBooking(id);
+  if (!existing) return null;
+  const updated: SavedBooking = {
+    ...existing,
+    status,
+    ...(proofDataUrl !== undefined ? { proofDataUrl } : {}),
+  };
+  persistBooking(updated);
+  return updated;
 }
 
 export const useBookingStore = create<BookingState>((set, get) => ({
@@ -117,7 +136,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
   durationHours: 1,
   locationType: null,
   client: emptyClient,
-  paymentMethod: "card",
+  paymentMethod: "transfer",
   depositOnly: true,
   card: emptyCard,
   transferAcknowledged: false,
@@ -166,6 +185,12 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       ? Math.round(total * (spa.depositPercent / 100))
       : total;
 
+    // Bank transfer and mobile pay start as pending until proof is verified
+    const status: BookingStatus =
+      state.paymentMethod === "mobile" || state.paymentMethod === "transfer"
+        ? "pending"
+        : "confirmed";
+
     const booking: SavedBooking = {
       id: generateBookingId(),
       createdAt: new Date().toISOString(),
@@ -185,6 +210,8 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       depositOnly: state.depositOnly,
       total,
       paid,
+      status,
+      proofDataUrl: null,
     };
 
     persistBooking(booking);
@@ -200,7 +227,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       durationHours: 1,
       locationType: null,
       client: emptyClient,
-      paymentMethod: "card",
+      paymentMethod: "transfer",
       depositOnly: true,
       card: emptyCard,
       transferAcknowledged: false,
