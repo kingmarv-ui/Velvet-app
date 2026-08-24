@@ -50,7 +50,7 @@ export function StepPay() {
     const dateStr = date ? format(parseISO(date), "EEEE, d MMMM yyyy") : "—";
     const timeStr = time ? formatTimeDisplay(time) : "—";
     const text = encodeURIComponent(
-      `Hello Velvetmoon Spa 👋\n\nI just completed my booking online.\n\nService: ${serviceName}\nDate: ${dateStr}\nTime: ${timeStr}\nAmount: ${formatPrice(dueNow)}\n\nI will love to send the payment via Zelle / Cash App / Venmo / PayPal / Apple Giftcard shortly.\n\nPlease confirm once received. Thank you!`,
+      `Hello Velvet Moon Wellness 👋\n\nI just completed my booking online.\n\nService: ${serviceName}\nDate: ${dateStr}\nTime: ${timeStr}\nAmount: ${formatPrice(dueNow)}\n\nI will love to send the payment via Zelle / Cash App / Venmo / PayPal / Apple Giftcard shortly.\n\nPlease confirm once received. Thank you!`,
     );
     return `https://wa.me/14246662911?text=${text}`;
   })();
@@ -81,7 +81,7 @@ export function StepPay() {
             >
               <span className="text-sm text-foreground/90">{s.name}</span>
               <span className="shrink-0 text-sm tabular-nums text-plum-deep">
-                {formatPrice(s.price)}
+                {formatPrice("scaledPrice" in s ? (s as { scaledPrice: number }).scaledPrice : s.price)}
               </span>
             </li>
           ))}
@@ -152,7 +152,7 @@ export function StepPay() {
           </div>
           <p className="text-xs text-muted-foreground">{bankTransfer.note}</p>
           <p className="text-xs leading-relaxed text-muted-foreground">
-            After you click &quot;Secure my appointment&quot;, your booking is
+            After you click "Secure my appointment", your booking is
             held as pending. Send the transfer, then upload a screenshot of the
             confirmation on the next screen so we can verify and confirm.
           </p>
@@ -215,7 +215,7 @@ export function StepPay() {
           </li>
           <li>
             <span className="font-medium text-foreground/80">Cancellation:</span>{" "}
-            At least 24 hours&apos; notice is required to cancel or reschedule
+            At least 24 hours' notice is required to cancel or reschedule
             without forfeiting the deposit.
           </li>
         </ul>
