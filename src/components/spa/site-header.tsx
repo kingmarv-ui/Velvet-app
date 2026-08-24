@@ -31,9 +31,9 @@ export function SiteHeader({
           </Link>
         ) : (
           <Link to="/" className="flex min-h-11 items-center gap-2.5">
-            <MoonMark className="size-8" />
+            <MoonMark className="size-9" />
             <span className="font-serif text-lg font-semibold tracking-tight text-plum-deep">
-              {spa.name}
+              {spa.wordmark}
             </span>
           </Link>
         )}

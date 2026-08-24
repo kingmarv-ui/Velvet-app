@@ -4,8 +4,9 @@ import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { Toaster } from "sonner";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import appCss from "../styles.css?url";
+import { FAVICON_PNG_SRC } from "@/lib/brand-assets";
 
-const APP_NAME = "Velvetmoon Spa";
+const APP_NAME = "Velvet Moon Wellness";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -16,12 +17,21 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Book a treatment at Velvetmoon Spa — luxury wellness, delivered with intention.",
+          "Velvet Moon Wellness — private massage & wellness. Relax. Unwind. Feel renewed.",
       },
-      { name: "theme-color", content: "#4A1C40" },
+      { name: "theme-color", content: "#100e12" },
+      { property: "og:title", content: "Velvet Moon Wellness" },
+      {
+        property: "og:description",
+        content: "Private massage & wellness. Relax. Unwind. Feel renewed.",
+      },
+      { property: "og:image", content: "/og.jpg" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: FAVICON_PNG_SRC },
+      { rel: "apple-touch-icon", href: FAVICON_PNG_SRC },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -30,7 +40,6 @@ export const Route = createRootRoute({
       },
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
     ],
   }),
   component: () => (
