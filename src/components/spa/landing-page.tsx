@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Clock, Instagram, Mail, Phone } from "lucide-react";
+import { Clock, Mail, Phone } from "lucide-react";
 import { Expandable } from "@/components/spa/expandable";
 import { BrandLogo } from "@/components/spa/moon-mark";
 import { ServiceCard } from "@/components/spa/service-card";
@@ -147,15 +147,6 @@ export function LandingPage() {
                 >
                   <Mail className="size-4 text-champagne" />
                   {contact.email.display}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={contact.instagram.url}
-                  className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-plum"
-                >
-                  <Instagram className="size-4" />
-                  {contact.instagram.handle}
                 </a>
               </li>
             </ul>
