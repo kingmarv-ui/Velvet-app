@@ -27,36 +27,35 @@ export function LandingPage() {
       <div className={cn(selectedCount > 0 && "pb-24")}>
         <SiteHeader />
         <main className="narrow px-5">
-          <section className="stagger-in pt-6 pb-12 text-center">
-            {/* Brand banner */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#100e12] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
-              <img
-                src={spa.bannerSrc ?? "/banner-hero.svg"}
-                alt=""
-                className="h-auto w-full object-cover"
-                width={1200}
-                height={480}
+          <section className="stagger-in pt-8 pb-12 text-center">
+            <div className="relative mx-auto max-w-md">
+              <div
+                className="absolute inset-0 -z-10 rounded-full opacity-40 blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(201,163,106,0.25) 0%, transparent 70%)",
+                }}
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#100e12]/40 via-transparent to-transparent" />
+              <BrandLogo className="mx-auto max-w-[280px] sm:max-w-[320px]" />
             </div>
 
-            <div className="mt-10">
-              <BrandLogo className="mx-auto h-12 w-auto max-w-[260px] sm:h-14" />
-              <p className="section-label mt-6">Private wellness</p>
-              <h1 className="mt-3 font-serif text-3xl font-medium tracking-tight text-plum-deep sm:text-4xl">
-                {spa.name}
-              </h1>
-              <p className="mx-auto mt-3 max-w-xs text-base leading-relaxed text-muted-foreground">
-                {spa.tagline}
-              </p>
-              <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-                Select your preferred massage, choose an available appointment
-                time, and securely complete your booking.
-              </p>
-              <Button asChild size="lg" className="mt-7 min-w-40">
-                <Link to="/book">Book Your Private Massage</Link>
-              </Button>
-            </div>
+            <p className="section-label mt-8">Private massage & wellness</p>
+            <h1 className="mt-3 font-serif text-3xl font-medium tracking-tight text-plum-deep sm:text-4xl">
+              {spa.wordmark}
+            </h1>
+            <p className="mx-auto mt-2 max-w-xs text-base leading-relaxed text-muted-foreground">
+              {spa.tagline}
+            </p>
+            <p className="mx-auto mt-1 text-[0.7rem] font-medium tracking-[0.28em] uppercase text-champagne/80">
+              {spa.subtitle}
+            </p>
+            <p className="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
+              Select your preferred massage, choose an available appointment
+              time, and securely complete your booking.
+            </p>
+            <Button asChild size="lg" className="mt-7 min-w-40">
+              <Link to="/book">Book Your Private Massage</Link>
+            </Button>
           </section>
 
           <div className="hairline" />
