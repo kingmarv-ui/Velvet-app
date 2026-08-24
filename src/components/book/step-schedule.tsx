@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { format, parseISO, startOfDay } from "date-fns";
 import "react-day-picker/style.css";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { bookingTotals, useBookingStore } from "@/lib/booking-store";
+import { useBookingStore } from "@/lib/booking-store";
 import {
   earliestBookableDate,
   getTimeSlots,
@@ -16,15 +13,16 @@ import { spa } from "@/lib/spa-config";
 import { cn, formatDuration, formatTimeDisplay } from "@/lib/utils";
 
 export function StepSchedule() {
-  const selectedIds = useBookingStore((s) => s.selectedIds);
   const dateIso = useBookingStore((s) => s.date);
   const time = useBookingStore((s) => s.time);
-  const client = useBookingStore((s) => s.client);
+  const durationHours = useBookingStore((s) => s.durationHours);
+  const locationType = useBookingStore((s) => s.locationType);
   const setDate = useBookingStore((s) => s.setDate);
   const setTime = useBookingStore((s) => s.setTime);
-  const patchClient = useBookingStore((s) => s.patchClient);
-  const { duration } = bookingTotals(selectedIds, true);
+  const setDurationHours = useBookingStore((s) => s.setDurationHours);
+  const setLocationType = useBookingStore((s) => s.setLocationType);
 
+  const durationMin = durationHours * 60;
   const selectedDate = dateIso ? parseISO(dateIso) : undefined;
   const [slotsLoading, setSlotsLoading] = useState(false);
 
@@ -33,12 +31,12 @@ export function StepSchedule() {
     setSlotsLoading(true);
     const t = window.setTimeout(() => setSlotsLoading(false), 180);
     return () => window.clearTimeout(t);
-  }, [dateIso]);
+  }, [dateIso, durationHours]);
 
   const slots = useMemo(() => {
-    if (!selectedDate || duration <= 0) return [];
-    return getTimeSlots(selectedDate, duration);
-  }, [selectedDate, duration]);
+    if (!selectedDate || durationMin <= 0) return [];
+    return getTimeSlots(selectedDate, durationMin);
+  }, [selectedDate, durationMin]);
 
   const availableCount = slots.filter((s) => s.available).length;
 
@@ -46,12 +44,11 @@ export function StepSchedule() {
     <div className="space-y-8">
       <div>
         <h1 className="font-serif text-3xl font-semibold text-plum-deep">
-          Date, time & details
+          Choose your appointment
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {duration > 0
-            ? `Your visit is about ${formatDuration(duration)}. Times in ${spa.timezoneLabel}.`
-            : "Select a service first so we can offer the right length of appointment."}
+          Select a date, arrival time, duration, and whether we host you or come
+          to you. Times in {spa.timezoneLabel}.
         </p>
       </div>
 
@@ -61,41 +58,110 @@ export function StepSchedule() {
           <DayPicker
             mode="single"
             selected={selectedDate}
-            onSelect={(d) => setDate(d ? format(d, "yyyy-MM-dd") : null)}
+            onSelect={(d) => {
+              setDate(d ? format(d, "yyyy-MM-dd") : null);
+              setTime(null);
+            }}
             disabled={[
               { before: startOfDay(new Date()) },
+              { before: earliestBookableDate() },
               { after: latestBookableDate() },
-              isClosedOn,
+              (date) => isClosedOn(date),
             ]}
-            startMonth={earliestBookableDate()}
-            endMonth={latestBookableDate()}
+            className="mx-auto"
           />
         </div>
       </section>
 
       <section>
-        <p className="section-label">Available times</p>
-        {!selectedDate ? (
-          <p className="mt-3 rounded-xl bg-cream-deep/70 px-4 py-6 text-center text-sm text-muted-foreground">
+        <p className="section-label">Duration</p>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          {[1, 2].map((h) => (
+            <button
+              key={h}
+              type="button"
+              onClick={() => {
+                setDurationHours(h);
+                setTime(null);
+              }}
+              className={cn(
+                "flex min-h-14 flex-col items-start justify-center rounded-2xl px-4 py-3 text-left transition-[box-shadow]",
+                durationHours === h
+                  ? "bg-card shadow-[0_0_0_1.5px_var(--color-plum)]"
+                  : "bg-card shadow-[var(--shadow-border)]",
+              )}
+            >
+              <span className="text-sm font-medium text-plum-deep">
+                {h} hour{h > 1 ? "s" : ""}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {formatDuration(h * 60)}
+              </span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Maximum {spa.maxDurationHours} hours per appointment.
+        </p>
+      </section>
+
+      <section>
+        <p className="section-label">Location</p>
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setLocationType("incall")}
+            className={cn(
+              "flex min-h-16 flex-col items-start justify-center rounded-2xl px-4 py-3 text-left transition-[box-shadow]",
+              locationType === "incall"
+                ? "bg-card shadow-[0_0_0_1.5px_var(--color-plum)]"
+                : "bg-card shadow-[var(--shadow-border)]",
+            )}
+          >
+            <span className="text-sm font-medium text-plum-deep">Incall</span>
+            <span className="mt-0.5 text-xs text-muted-foreground">
+              Address shared after booking is confirmed
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setLocationType("outcall")}
+            className={cn(
+              "flex min-h-16 flex-col items-start justify-center rounded-2xl px-4 py-3 text-left transition-[box-shadow]",
+              locationType === "outcall"
+                ? "bg-card shadow-[0_0_0_1.5px_var(--color-plum)]"
+                : "bg-card shadow-[var(--shadow-border)]",
+            )}
+          >
+            <span className="text-sm font-medium text-plum-deep">Outcall</span>
+            <span className="mt-0.5 text-xs text-muted-foreground">
+              We come to you — full address required next
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section>
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="section-label">Arrival time</p>
+          {dateIso && !slotsLoading ? (
+            <p className="text-xs text-muted-foreground">
+              {availableCount} available
+            </p>
+          ) : null}
+        </div>
+        {!dateIso ? (
+          <p className="mt-3 text-sm text-muted-foreground">
             Choose a date to see open times.
           </p>
         ) : slotsLoading ? (
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div
-                key={i}
-                className="h-11 animate-pulse rounded-full bg-cream-deep"
-              />
-            ))}
-          </div>
-        ) : availableCount === 0 ? (
-          <p className="mt-3 rounded-xl bg-cream-deep/70 px-4 py-6 text-center text-sm text-muted-foreground">
-            {isClosedOn(selectedDate)
-              ? "We’re closed this day. Please pick another date."
-              : "This day is fully reserved. Please choose another date."}
+          <p className="mt-3 text-sm text-muted-foreground">Loading times…</p>
+        ) : slots.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">
+            No times available for this date and duration. Try another day.
           </p>
         ) : (
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4">
             {slots.map((slot) => (
               <button
                 key={slot.time}
@@ -103,7 +169,7 @@ export function StepSchedule() {
                 disabled={!slot.available}
                 onClick={() => setTime(slot.time)}
                 className={cn(
-                  "h-11 rounded-full text-sm tabular-nums transition-[background-color,color,box-shadow] duration-150",
+                  "h-11 rounded-full text-sm font-medium transition-[box-shadow,background-color]",
                   slot.available
                     ? time === slot.time
                       ? "bg-plum text-primary-foreground"
@@ -117,54 +183,6 @@ export function StepSchedule() {
           </div>
         )}
       </section>
-
-      <section className="space-y-4">
-        <p className="section-label">Your details</p>
-        <div className="space-y-1.5">
-          <Label htmlFor="client-name">Full name</Label>
-          <Input
-            id="client-name"
-            autoComplete="name"
-            placeholder="Avery Moon"
-            value={client.name}
-            onChange={(e) => patchClient({ name: e.target.value })}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="client-phone">Phone</Label>
-          <Input
-            id="client-phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder="+1 (212) 555-0148"
-            value={client.phone}
-            onChange={(e) => patchClient({ phone: e.target.value })}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="client-email">Email</Label>
-          <Input
-            id="client-email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@email.com"
-            value={client.email}
-            onChange={(e) => patchClient({ email: e.target.value })}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="client-notes">Notes</Label>
-          <Textarea
-            id="client-notes"
-            placeholder="Pressure preference, allergies, pregnancy, areas to avoid…"
-            value={client.notes}
-            onChange={(e) => patchClient({ notes: e.target.value })}
-          />
-          <p className="text-xs text-muted-foreground">
-            Optional — anything that helps us take better care of you.
-          </p>
-        </div>
-      </section>
     </div>
   );
 }
@@ -172,10 +190,14 @@ export function StepSchedule() {
 export function scheduleReady(
   date: string | null,
   time: string | null,
-  name: string,
-  phone: string,
-  email: string,
+  locationType: "incall" | "outcall" | null,
+  durationHours: number,
 ): boolean {
-  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-  return Boolean(date && time && name.trim().length > 1 && phone.trim().length >= 8 && emailOk);
+  return Boolean(
+    date &&
+      time &&
+      locationType &&
+      durationHours >= 1 &&
+      durationHours <= spa.maxDurationHours,
+  );
 }
