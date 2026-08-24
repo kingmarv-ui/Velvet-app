@@ -156,3 +156,7 @@ export const services: Service[] = [
 export function getService(id: string): Service | undefined {
   return services.find((s) => s.id === id);
 }
+
+export function getHoursForDayName(dayName: string): DayHours | undefined {
+  return hours.find((h) => h.day === dayName);
+}
