@@ -20,8 +20,8 @@ export function BookingProgress({ step }: { step: 1 | 2 | 3 | 4 }) {
                 <span
                   className={cn(
                     "flex size-8 items-center justify-center rounded-full text-xs font-medium tabular-nums transition-colors duration-200",
-                    done && "bg-champagne text-accent-foreground",
-                    current && "bg-plum text-primary-foreground",
+                    done && "bg-champagne/25 text-champagne",
+                    current && "bg-champagne text-primary-foreground",
                     !done && !current && "bg-cream-deep text-muted-foreground",
                   )}
                 >
