@@ -1,6 +1,7 @@
 /**
  * Velvetmoon Spa — editable content.
  * Update services, prices, hours, and contact here.
+ * Contact: +1 (424) 666-2911
  */
 
 export const spa = {
