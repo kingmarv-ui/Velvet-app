@@ -11,11 +11,17 @@ export function SiteFooter() {
           <Link to="/" className="text-plum hover:underline">
             Home
           </Link>
+          <a href="/#services" className="text-plum hover:underline">
+            Massage Services
+          </a>
+          <a href="/#about" className="text-plum hover:underline">
+            About
+          </a>
           <Link to="/book" className="text-plum hover:underline">
-            Book
+            Booking
           </Link>
-          <a href={contact.instagram.url} className="text-plum hover:underline">
-            Instagram
+          <a href="/#contact" className="text-plum hover:underline">
+            Contact
           </a>
           <a href={contact.email.href} className="text-plum hover:underline">
             Email

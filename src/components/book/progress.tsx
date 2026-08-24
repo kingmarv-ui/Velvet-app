@@ -1,18 +1,16 @@
 import { cn } from "@/lib/utils";
 
 const STEPS = [
-  { n: 1, label: "Services" },
+  { n: 1, label: "Service" },
   { n: 2, label: "Schedule" },
-  { n: 3, label: "Confirm" },
+  { n: 3, label: "Details" },
+  { n: 4, label: "Payment" },
 ] as const;
 
-export function BookingProgress({ step }: { step: 1 | 2 | 3 }) {
+export function BookingProgress({ step }: { step: 1 | 2 | 3 | 4 }) {
   return (
-    <div className="px-1">
-      <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-        Step {step} of 3
-      </p>
-      <ol className="mt-3 flex items-center">
+    <div>
+      <ol className="flex items-start">
         {STEPS.map((item, i) => {
           const done = step > item.n;
           const current = step === item.n;
@@ -31,7 +29,7 @@ export function BookingProgress({ step }: { step: 1 | 2 | 3 }) {
                 </span>
                 <span
                   className={cn(
-                    "text-[0.7rem] font-medium",
+                    "text-[0.65rem] font-medium",
                     current ? "text-plum-deep" : "text-muted-foreground",
                   )}
                 >
@@ -41,7 +39,7 @@ export function BookingProgress({ step }: { step: 1 | 2 | 3 }) {
               {i < STEPS.length - 1 ? (
                 <div
                   className={cn(
-                    "relative top-[-0.7rem] mx-1.5 h-px flex-1",
+                    "relative top-[-0.7rem] mx-1 h-px flex-1",
                     step > item.n ? "bg-champagne" : "bg-border",
                   )}
                 />

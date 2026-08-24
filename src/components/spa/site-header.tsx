@@ -4,6 +4,14 @@ import { Button } from "@/components/ui/button";
 import { spa } from "@/lib/spa-config";
 import { cn } from "@/lib/utils";
 
+const nav = [
+  { href: "/", label: "Home", to: "/" as const },
+  { href: "/#services", label: "Massage Services" },
+  { href: "/#about", label: "About" },
+  { href: "/book", label: "Booking", to: "/book" as const },
+  { href: "/#contact", label: "Contact" },
+];
+
 export function SiteHeader({
   showCta = true,
   backTo,
@@ -29,6 +37,27 @@ export function SiteHeader({
             </span>
           </Link>
         )}
+        <nav className="hidden items-center gap-4 md:flex">
+          {nav.map((item) =>
+            item.to ? (
+              <Link
+                key={item.label}
+                to={item.to}
+                className="text-[0.7rem] font-medium tracking-[0.14em] uppercase text-plum/80 hover:text-plum"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <a
+                key={item.label}
+                href={item.href}
+                className="text-[0.7rem] font-medium tracking-[0.14em] uppercase text-plum/80 hover:text-plum"
+              >
+                {item.label}
+              </a>
+            ),
+          )}
+        </nav>
         {showCta ? (
           <Button asChild size="sm" className={cn(backTo && "ml-auto")}>
             <Link to="/book">Book now</Link>
