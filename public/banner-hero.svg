@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" role="img" aria-label="Velvetmoon Spa — Luxury wellness">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c0a0e"/>
+      <stop offset="50%" stop-color="#141018"/>
+      <stop offset="100%" stop-color="#1a1218"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8D5A3"/>
+      <stop offset="50%" stop-color="#C9A36A"/>
+      <stop offset="100%" stop-color="#A67C3D"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#C9A36A" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#100e12" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="480" fill="url(#bg)"/>
+  <rect width="1200" height="480" fill="url(#glow)"/>
+  <g opacity="0.04" stroke="#E8D5A3" stroke-width="0.5">
+    <path d="M0 120 Q300 90 600 120 T1200 120"/>
+    <path d="M0 200 Q300 170 600 200 T1200 200"/>
+    <path d="M0 280 Q300 250 600 280 T1200 280"/>
+    <path d="M0 360 Q300 330 600 360 T1200 360"/>
+  </g>
+  <g transform="translate(568,72)">
+    <circle cx="32" cy="40" r="28" fill="url(#gold)" opacity="0.9"/>
+    <circle cx="44" cy="34" r="22" fill="#100e12"/>
+    <circle cx="50" cy="22" r="2.2" fill="#E8D5A3" opacity="0.65"/>
+  </g>
+  <text
+    x="600"
+    y="200"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="56"
+    font-weight="500"
+    letter-spacing="0.06em"
+    fill="#F5F0E8"
+  >Velvetmoon</text>
+  <text
+    x="600"
+    y="236"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, sans-serif"
+    font-size="13"
+    font-weight="500"
+    letter-spacing="0.4em"
+    fill="#C9A36A"
+  >SPA</text>
+  <line x1="480" y1="268" x2="720" y2="268" stroke="#C9A36A" stroke-width="0.8" opacity="0.45"/>
+  <text
+    x="600"
+    y="310"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="20"
+    font-style="italic"
+    fill="#F5F0E8"
+    opacity="0.75"
+  >Luxury wellness, delivered with intention</text>
+  <text
+    x="600"
+    y="360"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, sans-serif"
+    font-size="12"
+    letter-spacing="0.18em"
+    fill="#F5F0E8"
+    opacity="0.4"
+  >PRIVATE MASSAGE · DISCREET · BY APPOINTMENT</text>
+</svg>
