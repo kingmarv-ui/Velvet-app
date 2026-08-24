@@ -1,25 +1,26 @@
 /**
  * Velvetmoon Spa — editable content.
- * Update services, prices, hours, contact, address, and policies here.
+ * Update services, prices, hours, and contact here.
  */
 
 export const spa = {
   name: "Velvetmoon Spa",
   wordmark: "Velvetmoon",
   tagline: "Luxury wellness, delivered with intention",
-  shortLocation: "West Village, New York",
   timezoneLabel: "Eastern Time",
   depositPercent: 50,
   bookingLeadHours: 2,
   bookingWindowDays: 60,
   slotIntervalMin: 30,
+  /** Set to "/logo.png" after you add the file to public/ */
+  logoSrc: null as string | null,
 } as const;
 
 export const about = {
   headline: "A quieter kind of luxury",
   body: [
     "Velvetmoon Spa is a sanctuary for unhurried care. Our therapists blend classical technique with a quietly luxurious touch — warm rooms, considered products, and treatments paced to your body rather than the clock.",
-    "Whether you join us in-studio or we come to you, every session is designed to feel private, professional, and deeply restorative.",
+    "Every session is designed to feel private, professional, and deeply restorative. Book in advance, arrive as you are, and leave lighter.",
   ],
 };
 
@@ -29,25 +30,17 @@ export const contact = {
     url: "https://instagram.com/velvetmoonspa",
   },
   phone: {
-    display: "+1 (212) 555-0148",
-    tel: "+12125550148",
+    display: "+1 (440) 544-5757",
+    tel: "+14405445757",
   },
   whatsapp: {
     display: "WhatsApp",
-    url: "https://wa.me/12125550148",
+    url: "https://wa.me/14405445757?text=Hello%2C%20I%20want%20to%20book%20a%20spa%20appointment",
   },
   email: {
-    display: "hello@velvetmoonspa.com",
-    href: "mailto:hello@velvetmoonspa.com",
+    display: "bookings@velvetmoonspa.com",
+    href: "mailto:bookings@velvetmoonspa.com",
   },
-};
-
-export const address = {
-  line1: "14 Moonstone Lane",
-  line2: "West Village, New York, NY 10014",
-  mapsUrl:
-    "https://www.google.com/maps/dir/?api=1&destination=14%20Moonstone%20Lane%2C%20West%20Village%2C%20New%20York%2C%20NY%2010014",
-  mapsLabel: "Open in Google Maps",
 };
 
 export type DayHours = {
@@ -111,82 +104,94 @@ export type Service = {
   /** Optional upper bound when a range is shown */
   priceTo?: number;
   featured?: boolean;
+  highlights?: string[];
 };
 
 export const services: Service[] = [
   {
-    id: "signature-full-body",
-    name: "Signature Velvetmoon Full Body Massage",
+    id: "velvet-signature",
+    name: "Velvet Signature Massage",
     description:
-      "Our namesake ritual. Slow, flowing strokes from scalp to feet, warmed oil, and a pace that lets the nervous system truly settle. Ideal if you want to leave heavier than you arrived — in the best way.",
-    durationMin: 90,
-    price: 220,
+      "A personalized relaxation massage designed to ease tension and create a calm, intimate atmosphere.",
+    durationMin: 60,
+    price: 150,
     featured: true,
+    highlights: [
+      "Gentle full-body relaxation",
+      "Stress and tension relief",
+      "Soothing touch and calming ambiance",
+      "Enhanced sense of comfort and connection",
+    ],
   },
   {
-    id: "deep-tissue",
-    name: "Deep Tissue Therapy",
+    id: "luxe-touch",
+    name: "Luxe Touch Massage",
     description:
-      "Focused, unhurried work for stubborn tension in the back, neck, and hips. Pressure is collaborative — we go as deep as your body allows, never further.",
-    durationMin: 75,
-    price: 185,
-  },
-  {
-    id: "aromatherapy",
-    name: "Aromatherapy Massage",
-    description:
-      "A full-body massage scented to your mood: calming lavender and chamomile, or a brighter citrus blend. Soft lighting, warm linens, and room to breathe.",
-    durationMin: 75,
-    price: 195,
-  },
-  {
-    id: "hot-stone",
-    name: "Hot Stone Ritual",
-    description:
-      "Smooth basalt stones, heated and placed along the spine, then used as an extension of the therapist’s hands. Melts guarding in the shoulders and lower back.",
-    durationMin: 90,
-    price: 240,
-  },
-  {
-    id: "couples",
-    name: "Couples Massage",
-    description:
-      "Two tables, one quiet room. Side-by-side massages timed together so you finish in the same breath. A considered way to mark an occasion — or an ordinary Tuesday.",
-    durationMin: 90,
-    price: 380,
-  },
-  {
-    id: "four-hands",
-    name: "Four Hands Massage",
-    description:
-      "Two therapists, one synchronized rhythm. Covering more of the body at once, this is immersive and surprisingly meditative — a Velvetmoon favourite.",
+      "A refined massage experience combining flowing techniques with focused attention and a warm, inviting atmosphere.",
     durationMin: 60,
-    price: 280,
+    price: 200,
+    highlights: [
+      "Relaxing full-body massage",
+      "Focused muscle tension release",
+      "Sensory relaxation",
+      "Playful, flirtatious atmosphere",
+    ],
   },
   {
-    id: "scrub-polish",
-    name: "Body Scrub & Polish",
+    id: "signature-full-body",
+    name: "Signature Full-Body Massage",
     description:
-      "A mineral-and-oil polish that sloughs dullness and leaves skin velvety. Finished with a hydrating balm. Beautiful on its own, or before a massage.",
-    durationMin: 45,
-    price: 140,
-  },
-  {
-    id: "facial-glow",
-    name: "Facial Glow Treatment",
-    description:
-      "A tailored facial: cleanse, exfoliate, massage, mask, and glow. Products are chosen for your skin that day — not a one-size protocol.",
+      "A comprehensive massage designed to provide balanced attention throughout the body while creating a luxurious, intimate experience.",
     durationMin: 60,
-    price: 165,
+    price: 250,
+    highlights: [
+      "Full-body relaxation",
+      "Targeted tension relief",
+      "Personalized massage pressure",
+      "Heightened sensory relaxation and chemistry",
+    ],
   },
   {
-    id: "luxury-packages",
-    name: "Luxury Spa Packages",
+    id: "private-luxe-retreat",
+    name: "Private Luxe Retreat",
     description:
-      "A composed half-day: scrub, signature massage, and facial, with tea between treatments. Final pairing is confirmed after we speak — the range reflects duration and add-ins.",
-    durationMin: 150,
-    price: 420,
-    priceTo: 560,
+      "An elevated private massage experience with customized attention, tranquil surroundings, and an indulgent atmosphere.",
+    durationMin: 60,
+    price: 300,
+    highlights: [
+      "Personalized bodywork",
+      "Deep relaxation",
+      "Romantic and sensual ambiance",
+      "Increased comfort, confidence, and connection",
+    ],
+  },
+  {
+    id: "premium-sensation",
+    name: "Premium Sensation Massage",
+    description:
+      "Our premium massage experience combining tailored bodywork, luxurious surroundings, and attentive personal service.",
+    durationMin: 60,
+    price: 400,
+    highlights: [
+      "Bespoke massage techniques",
+      "Total-body relaxation",
+      "Enhanced sensory experience",
+      "Flirty, intimate atmosphere",
+    ],
+  },
+  {
+    id: "executive-private",
+    name: "Executive Private Massage",
+    description:
+      "Our signature private experience, offering highly personalized massage, extended relaxation, and an exclusive atmosphere tailored to the individual.",
+    durationMin: 120,
+    price: 750,
+    highlights: [
+      "Bespoke massage experience",
+      "Extended relaxation and recovery",
+      "Personalized attention throughout",
+      "Elevated intimacy, chemistry, and sensory relaxation",
+    ],
   },
 ];
 
