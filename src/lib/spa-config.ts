@@ -51,13 +51,13 @@ export type DayHours = {
 };
 
 export const hours: DayHours[] = [
-  { day: "Sunday", open: "10:00", close: "16:00" },
-  { day: "Monday", open: null, close: null },
-  { day: "Tuesday", open: "10:00", close: "19:00" },
-  { day: "Wednesday", open: "10:00", close: "19:00" },
-  { day: "Thursday", open: "10:00", close: "19:00" },
-  { day: "Friday", open: "10:00", close: "20:00" },
-  { day: "Saturday", open: "09:00", close: "18:00" },
+  { day: "Sunday", open: null, close: null },
+  { day: "Monday", open: "07:00", close: "23:00" },
+  { day: "Tuesday", open: "07:00", close: "23:00" },
+  { day: "Wednesday", open: "07:00", close: "23:00" },
+  { day: "Thursday", open: "07:00", close: "23:00" },
+  { day: "Friday", open: "07:00", close: "23:00" },
+  { day: "Saturday", open: "07:00", close: "23:00" },
 ];
 
 export const policies = [
