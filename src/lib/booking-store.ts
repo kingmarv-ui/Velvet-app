@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { getService, spa, type Service } from "./spa-config";
-import { generateBookingId, totalPrice } from "./availability";
+import { generateBookingId, scaledServicePrice, totalPrice } from "./availability";
 
 export type PaymentMethod = "transfer" | "mobile";
 export type LocationType = "incall" | "outcall";
@@ -180,7 +180,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
     if (!state.policyAccepted) return null;
 
     const durationMin = state.durationHours * 60;
-    const total = totalPrice(services);
+    const total = totalPrice(services, state.durationHours);
     const paid = state.depositOnly
       ? Math.round(total * (spa.depositPercent / 100))
       : total;
@@ -199,7 +199,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
         id: s.id,
         name: s.name,
         durationMin,
-        price: s.price,
+        price: scaledServicePrice(s, state.durationHours),
       })),
       date: state.date,
       time: state.time,
@@ -237,10 +237,15 @@ export const useBookingStore = create<BookingState>((set, get) => ({
 
 export function bookingTotals(ids: string[], depositOnly: boolean, durationHours?: number) {
   const services = selectedServices(ids);
-  const duration = durationHours ? durationHours * 60 : services.reduce((s, x) => s + x.durationMin, 0);
-  const total = totalPrice(services);
+  const hours = durationHours ?? 1;
+  const duration = hours * 60;
+  const total = totalPrice(services, hours);
   const deposit = Math.round(total * (spa.depositPercent / 100));
   const dueNow = depositOnly ? deposit : total;
   const remainder = total - dueNow;
-  return { services, duration, total, deposit, dueNow, remainder };
+  const lineItems = services.map((s) => ({
+    ...s,
+    scaledPrice: scaledServicePrice(s, hours),
+  }));
+  return { services: lineItems, duration, total, deposit, dueNow, remainder, durationHours: hours };
 }

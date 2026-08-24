@@ -24,8 +24,19 @@ export function totalDuration(selected: Service[]): number {
   return selected.reduce((sum, s) => sum + s.durationMin, 0);
 }
 
-export function totalPrice(selected: Service[]): number {
-  return selected.reduce((sum, s) => sum + s.price, 0);
+/** Hourly-scale a service price to the chosen appointment duration. */
+export function scaledServicePrice(service: Service, durationHours: number): number {
+  const hours = Math.max(0.5, durationHours);
+  const baseHours = Math.max(0.5, service.durationMin / 60);
+  return Math.round(service.price * (hours / baseHours));
+}
+
+/** Sum of service prices. Pass durationHours to scale by appointment length. */
+export function totalPrice(selected: Service[], durationHours?: number): number {
+  if (durationHours == null) {
+    return selected.reduce((sum, s) => sum + s.price, 0);
+  }
+  return selected.reduce((sum, s) => sum + scaledServicePrice(s, durationHours), 0);
 }
 
 export type TimeSlot = {
