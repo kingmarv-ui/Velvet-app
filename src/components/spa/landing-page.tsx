@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Clock, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Instagram, Mail, Phone } from "lucide-react";
 import { Expandable } from "@/components/spa/expandable";
 import { MoonMark } from "@/components/spa/moon-mark";
 import { ServiceCard } from "@/components/spa/service-card";
@@ -8,7 +8,6 @@ import { SiteHeader } from "@/components/spa/site-header";
 import { Button } from "@/components/ui/button";
 import {
   about,
-  address,
   contact,
   hours,
   policies,
@@ -30,7 +29,7 @@ export function LandingPage() {
         <main className="narrow px-5">
           <section className="stagger-in pt-10 pb-8 text-center">
             <MoonMark className="mx-auto size-12" />
-            <p className="section-label mt-6">{spa.shortLocation}</p>
+            <p className="section-label mt-6">Private wellness</p>
             <h1 className="mt-3 font-serif text-4xl font-semibold text-plum-deep sm:text-5xl">
               {spa.name}
             </h1>
@@ -105,71 +104,44 @@ export function LandingPage() {
             <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
               Contact
             </h2>
-            <a
-              href={contact.instagram.url}
-              className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-plum"
-            >
-              <Instagram className="size-4" />
-              {contact.instagram.handle}
-            </a>
-            <Expandable
-              moreLabel="See contact details"
-              lessLabel="Hide contact details"
-              preview={null}
-            >
-              <ul className="mt-1 space-y-1">
-                <li>
-                  <a
-                    href={`tel:${contact.phone.tel}`}
-                    className="inline-flex min-h-11 items-center gap-2 text-sm text-foreground"
-                  >
-                    <Phone className="size-4 text-champagne" />
-                    {contact.phone.display}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={contact.whatsapp.url}
-                    className="inline-flex min-h-11 items-center gap-2 text-sm text-foreground"
-                  >
-                    <Phone className="size-4 text-champagne" />
-                    {contact.whatsapp.display}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={contact.email.href}
-                    className="inline-flex min-h-11 items-center gap-2 text-sm text-foreground"
-                  >
-                    <Mail className="size-4 text-champagne" />
-                    {contact.email.display}
-                  </a>
-                </li>
-              </ul>
-            </Expandable>
-          </section>
-
-          <div className="hairline" />
-
-          <section className="py-8" id="location">
-            <p className="section-label">Address</p>
-            <a
-              href={address.mapsUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 flex min-h-11 items-start gap-3 text-sm leading-relaxed text-plum"
-            >
-              <MapPin className="mt-0.5 size-4 shrink-0 text-champagne" />
-              <span>
-                <span className="block font-medium underline-offset-4 hover:underline">
-                  {address.line1}
-                </span>
-                <span className="block text-muted-foreground">{address.line2}</span>
-                <span className="mt-1 block text-xs tracking-wide uppercase">
-                  {address.mapsLabel}
-                </span>
-              </span>
-            </a>
+            <ul className="mt-4 space-y-1">
+              <li>
+                <a
+                  href={`tel:${contact.phone.tel}`}
+                  className="inline-flex min-h-11 items-center gap-2 text-sm text-foreground"
+                >
+                  <Phone className="size-4 text-champagne" />
+                  {contact.phone.display}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={contact.whatsapp.url}
+                  className="inline-flex min-h-11 items-center gap-2 text-sm text-foreground"
+                >
+                  <Phone className="size-4 text-champagne" />
+                  WhatsApp {contact.phone.display}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={contact.email.href}
+                  className="inline-flex min-h-11 items-center gap-2 text-sm text-foreground"
+                >
+                  <Mail className="size-4 text-champagne" />
+                  {contact.email.display}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={contact.instagram.url}
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-plum"
+                >
+                  <Instagram className="size-4" />
+                  {contact.instagram.handle}
+                </a>
+              </li>
+            </ul>
           </section>
 
           <div className="hairline" />
