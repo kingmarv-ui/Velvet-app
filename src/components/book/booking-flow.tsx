@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { BookingProgress } from "@/components/book/progress";
 import { StepServices } from "@/components/book/step-services";
 import { scheduleReady, StepSchedule } from "@/components/book/step-schedule";
+import { detailsReady, StepDetails } from "@/components/book/step-details";
 import { paymentReady, StepPay } from "@/components/book/step-pay";
 import { Button } from "@/components/ui/button";
 import { MoonMark } from "@/components/spa/moon-mark";
@@ -12,7 +13,7 @@ import { spa } from "@/lib/spa-config";
 import { bookingTotals, useBookingStore } from "@/lib/booking-store";
 import { formatPrice } from "@/lib/utils";
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 export function BookingFlow() {
   const navigate = useNavigate();
@@ -22,44 +23,56 @@ export function BookingFlow() {
   const selectedIds = useBookingStore((s) => s.selectedIds);
   const date = useBookingStore((s) => s.date);
   const time = useBookingStore((s) => s.time);
+  const durationHours = useBookingStore((s) => s.durationHours);
+  const locationType = useBookingStore((s) => s.locationType);
   const client = useBookingStore((s) => s.client);
   const paymentMethod = useBookingStore((s) => s.paymentMethod);
   const depositOnly = useBookingStore((s) => s.depositOnly);
   const card = useBookingStore((s) => s.card);
   const transferAcknowledged = useBookingStore((s) => s.transferAcknowledged);
+  const policyAccepted = useBookingStore((s) => s.policyAccepted);
   const confirmBooking = useBookingStore((s) => s.confirmBooking);
   const resetFlow = useBookingStore((s) => s.resetFlow);
 
-  const { dueNow } = bookingTotals(selectedIds, depositOnly);
+  const { dueNow } = bookingTotals(selectedIds, depositOnly, durationHours);
 
   const canContinue =
     step === 1
       ? selectedIds.length > 0
       : step === 2
-        ? scheduleReady(date, time, client.name, client.phone, client.email)
-        : paymentReady(paymentMethod, card, transferAcknowledged);
+        ? scheduleReady(date, time, locationType, durationHours)
+        : step === 3
+          ? detailsReady(
+              client.name,
+              client.phone,
+              client.email,
+              client.address,
+              locationType,
+            )
+          : paymentReady(paymentMethod, card, transferAcknowledged) &&
+            policyAccepted;
 
   function goBack() {
     if (step === 1) {
       void navigate({ to: "/" });
       return;
     }
-    setStep((s) => (s === 3 ? 2 : 1));
+    setStep((s) => (s - 1) as Step);
   }
 
   function goNext() {
     if (!canContinue) {
-      toast.message(
-        step === 1
-          ? "Select at least one service to continue."
-          : step === 2
-            ? "Choose a time and complete your details."
-            : "Add payment details to confirm.",
-      );
+      const messages: Record<Step, string> = {
+        1: "Select a service to continue.",
+        2: "Choose date, time, duration, and location.",
+        3: "Complete your details to continue.",
+        4: "Complete payment details and accept the policies.",
+      };
+      toast.message(messages[step]);
       return;
     }
-    if (step < 3) {
-      setStep((s) => (s === 1 ? 2 : 3));
+    if (step < 4) {
+      setStep((s) => (s + 1) as Step);
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
@@ -107,7 +120,8 @@ export function BookingFlow() {
         <div className="mt-8">
           {step === 1 ? <StepServices /> : null}
           {step === 2 ? <StepSchedule /> : null}
-          {step === 3 ? <StepPay /> : null}
+          {step === 3 ? <StepDetails /> : null}
+          {step === 4 ? <StepPay /> : null}
         </div>
       </main>
 
@@ -116,13 +130,13 @@ export function BookingFlow() {
           <div className="min-w-0">
             <p className="text-sm font-medium tabular-nums text-plum-deep">
               {selectedIds.length
-                ? step === 3
+                ? step === 4
                   ? `Due now ${formatPrice(dueNow)}`
                   : `${selectedIds.length} selected`
                 : "No services yet"}
             </p>
             <p className="text-xs text-muted-foreground">
-              {step === 3 ? "Instant confirmation" : "You can go back anytime"}
+              {step === 4 ? "Secure your appointment" : "You can go back anytime"}
             </p>
           </div>
           <Button
@@ -132,8 +146,8 @@ export function BookingFlow() {
           >
             {submitting
               ? "Confirming…"
-              : step === 3
-                ? "Confirm booking"
+              : step === 4
+                ? "Secure my appointment"
                 : "Continue"}
           </Button>
         </div>
