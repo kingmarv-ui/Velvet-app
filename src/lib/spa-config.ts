@@ -28,10 +28,6 @@ export const about = {
 };
 
 export const contact = {
-  instagram: {
-    handle: "@velvetmoonspa",
-    url: "https://instagram.com/velvetmoonspa",
-  },
   phone: {
     display: "+1 (424) 666-2911",
     tel: "+14246662911",
