@@ -1,20 +1,24 @@
 import { cn } from "@/lib/utils";
+import { LOGO_MARK_SRC, LOGO_SRC } from "@/lib/brand-assets";
 
-/** Premium crescent mark — charcoal + champagne gold */
+/** Official circular brand mark */
 export function MoonMark({ className }: { className?: string }) {
   return (
     <img
-      src="/logo-mark.svg"
+      src={LOGO_MARK_SRC}
       alt=""
-      width={32}
-      height={32}
-      className={cn("size-8 shrink-0", className)}
+      width={40}
+      height={40}
+      className={cn(
+        "size-9 shrink-0 rounded-full object-cover shadow-[0_0_0_1px_rgba(201,163,106,0.35)]",
+        className,
+      )}
       aria-hidden="true"
     />
   );
 }
 
-/** Full wordmark logo for hero / header lockups */
+/** Full circular logo for hero and branding lockups */
 export function BrandLogo({
   className,
   variant = "full",
@@ -25,17 +29,24 @@ export function BrandLogo({
   if (variant === "mark") {
     return (
       <img
-        src="/logo-mark.svg"
-        alt="Velvetmoon Spa"
-        className={cn("h-10 w-10", className)}
+        src={LOGO_MARK_SRC}
+        alt="Velvet Moon Wellness"
+        width={80}
+        height={80}
+        className={cn("size-20 rounded-full object-cover", className)}
       />
     );
   }
   return (
     <img
-      src="/logo.svg"
-      alt="Velvetmoon Spa"
-      className={cn("h-10 w-auto max-w-[220px]", className)}
+      src={LOGO_SRC}
+      alt="Velvet Moon Wellness"
+      width={480}
+      height={480}
+      className={cn(
+        "mx-auto h-auto w-full max-w-[280px] rounded-full object-cover shadow-[0_16px_48px_-16px_rgba(0,0,0,0.65)] sm:max-w-[320px]",
+        className,
+      )}
     />
   );
 }
