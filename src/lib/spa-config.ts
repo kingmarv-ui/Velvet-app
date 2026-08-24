@@ -13,7 +13,9 @@ export const spa = {
   bookingWindowDays: 60,
   slotIntervalMin: 30,
   maxDurationHours: 2,
-  logoSrc: null as string | null,
+  logoSrc: "/logo.svg" as string | null,
+  logoMarkSrc: "/logo-mark.svg" as string | null,
+  bannerSrc: "/banner-hero.svg" as string | null,
 } as const;
 
 export const about = {
