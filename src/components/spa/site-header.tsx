@@ -20,7 +20,7 @@ export function SiteHeader({
   backTo?: { to: "/"; label?: string };
 }) {
   return (
-    <header className="sticky top-0 z-30 border-b border-plum/8 bg-cream/85 backdrop-blur-md">
+    <header className="sticky top-0 z-30 border-b border-white/8 bg-[#100e12]/75 backdrop-blur-xl">
       <div className="narrow flex h-14 items-center justify-between gap-3 px-5">
         {backTo ? (
           <Link
@@ -43,7 +43,7 @@ export function SiteHeader({
               <Link
                 key={item.label}
                 to={item.to}
-                className="text-[0.7rem] font-medium tracking-[0.14em] uppercase text-plum/80 hover:text-plum"
+                className="text-[0.65rem] font-medium tracking-[0.18em] uppercase text-foreground/55 hover:text-champagne"
               >
                 {item.label}
               </Link>
@@ -51,7 +51,7 @@ export function SiteHeader({
               <a
                 key={item.label}
                 href={item.href}
-                className="text-[0.7rem] font-medium tracking-[0.14em] uppercase text-plum/80 hover:text-plum"
+                className="text-[0.65rem] font-medium tracking-[0.18em] uppercase text-foreground/55 hover:text-champagne"
               >
                 {item.label}
               </a>

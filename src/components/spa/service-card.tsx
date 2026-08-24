@@ -21,7 +21,7 @@ export function ServiceCard({
     <article
       className={cn(
         "soft-card p-4 transition-[box-shadow,transform] duration-200",
-        selected && "shadow-[0_0_0_1.5px_var(--color-plum),var(--shadow-border)]",
+        selected && "shadow-[0_0_0_1.5px_var(--color-champagne),var(--shadow-border-hover)]",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -29,7 +29,7 @@ export function ServiceCard({
           {service.name}
         </h3>
         {service.featured ? (
-          <span className="mt-1 shrink-0 rounded-full bg-champagne-light/70 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-plum uppercase">
+          <span className="mt-1 shrink-0 rounded-full bg-champagne/15 px-2.5 py-0.5 text-[0.65rem] font-medium tracking-[0.12em] text-champagne uppercase">
             Signature
           </span>
         ) : null}
