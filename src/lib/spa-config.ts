@@ -1,27 +1,28 @@
 /**
- * Velvetmoon Spa — editable content.
+ * Velvet Moon Wellness — editable content.
  * Update services, prices, hours, and contact here.
  */
 
 export const spa = {
-  name: "Velvetmoon Spa",
-  wordmark: "Velvetmoon",
-  tagline: "Luxury wellness, delivered with intention",
+  name: "Velvet Moon Wellness",
+  wordmark: "Velvet Moon",
+  tagline: "Relax. Unwind. Feel renewed.",
+  subtitle: "Massage & Wellness",
   timezoneLabel: "Eastern Time",
   depositPercent: 50,
   bookingLeadHours: 2,
   bookingWindowDays: 60,
   slotIntervalMin: 30,
   maxDurationHours: 2,
-  logoSrc: "/logo.svg" as string | null,
-  logoMarkSrc: "/logo-mark.svg" as string | null,
-  bannerSrc: "/banner-hero.svg" as string | null,
+  logoSrc: "/logo.webp" as string | null,
+  logoMarkSrc: "/logo-mark.webp" as string | null,
+  bannerSrc: "/banner-hero.webp" as string | null,
 } as const;
 
 export const about = {
   headline: "A quieter kind of luxury",
   body: [
-    "Velvetmoon Spa is a sanctuary for unhurried care. Our therapists blend classical technique with a quietly luxurious touch — warm rooms, considered products, and treatments paced to your body rather than the clock.",
+    "Velvet Moon Wellness is a sanctuary for unhurried care. Our therapists blend classical technique with a quietly luxurious touch — warm rooms, considered products, and treatments paced to your body rather than the clock.",
     "Every session is designed to feel private, professional, and deeply restorative. Book in advance, arrive as you are, and leave lighter.",
   ],
 };
@@ -64,7 +65,7 @@ export const hours: DayHours[] = [
 export const policies = [
   {
     title: "Professional services only",
-    body: "Velvetmoon Spa provides wellness and therapeutic treatments exclusively. We do not offer any inappropriate, sexual, or out-of-scope services. Bookings that imply otherwise will be cancelled without refund of the deposit.",
+    body: "Velvet Moon Wellness provides wellness and therapeutic treatments exclusively. We do not offer any inappropriate, sexual, or out-of-scope services. Bookings that imply otherwise will be cancelled without refund of the deposit.",
   },
   {
     title: "Cancellation & reschedule",
