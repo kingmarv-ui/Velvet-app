@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { format, parseISO, startOfDay } from "date-fns";
 import "react-day-picker/style.css";
-import { useBookingStore } from "@/lib/booking-store";
+import { bookingTotals, useBookingStore } from "@/lib/booking-store";
 import {
   earliestBookableDate,
   getTimeSlots,
@@ -10,12 +10,13 @@ import {
   latestBookableDate,
 } from "@/lib/availability";
 import { spa } from "@/lib/spa-config";
-import { cn, formatDuration, formatTimeDisplay } from "@/lib/utils";
+import { cn, formatDuration, formatPrice, formatTimeDisplay } from "@/lib/utils";
 
 export function StepSchedule() {
   const dateIso = useBookingStore((s) => s.date);
   const time = useBookingStore((s) => s.time);
   const durationHours = useBookingStore((s) => s.durationHours);
+  const selectedIds = useBookingStore((s) => s.selectedIds);
   const locationType = useBookingStore((s) => s.locationType);
   const setDate = useBookingStore((s) => s.setDate);
   const setTime = useBookingStore((s) => s.setTime);
@@ -23,6 +24,11 @@ export function StepSchedule() {
   const setLocationType = useBookingStore((s) => s.setLocationType);
 
   const durationMin = durationHours * 60;
+  const { total: durationTotal, deposit: durationDeposit } = bookingTotals(
+    selectedIds,
+    true,
+    durationHours,
+  );
   const selectedDate = dateIso ? parseISO(dateIso) : undefined;
   const [slotsLoading, setSlotsLoading] = useState(false);
 
@@ -96,6 +102,9 @@ export function StepSchedule() {
               </span>
               <span className="text-xs text-muted-foreground">
                 {formatDuration(h * 60)}
+                {selectedIds.length > 0
+                  ? ` · ${formatPrice(bookingTotals(selectedIds, true, h).total)}`
+                  : ""}
               </span>
             </button>
           ))}
@@ -103,6 +112,19 @@ export function StepSchedule() {
         <p className="mt-2 text-xs text-muted-foreground">
           Maximum {spa.maxDurationHours} hours per appointment.
         </p>
+        {selectedIds.length > 0 ? (
+          <p className="mt-3 rounded-xl border border-champagne/20 bg-champagne/5 px-3.5 py-2.5 text-sm text-foreground/90">
+            <span className="font-medium text-plum-deep">
+              {formatPrice(durationTotal)}
+            </span>
+            <span className="text-muted-foreground">
+              {" "}
+              for {durationHours} hour{durationHours > 1 ? "s" : ""}
+              {" · "}
+              {spa.depositPercent}% deposit {formatPrice(durationDeposit)}
+            </span>
+          </p>
+        ) : null}
       </section>
 
       <section>
