@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Clock, Instagram, Mail, Phone } from "lucide-react";
 import { Expandable } from "@/components/spa/expandable";
-import { MoonMark } from "@/components/spa/moon-mark";
+import { BrandLogo } from "@/components/spa/moon-mark";
 import { ServiceCard } from "@/components/spa/service-card";
 import { SiteFooter } from "@/components/spa/site-footer";
 import { SiteHeader } from "@/components/spa/site-header";
@@ -27,22 +27,36 @@ export function LandingPage() {
       <div className={cn(selectedCount > 0 && "pb-24")}>
         <SiteHeader />
         <main className="narrow px-5">
-          <section className="stagger-in pt-14 pb-12 text-center">
-            <MoonMark className="mx-auto size-12" />
-            <p className="section-label mt-6">Private wellness</p>
-            <h1 className="mt-4 font-serif text-4xl font-medium tracking-tight text-plum-deep sm:text-5xl">
-              {spa.name}
-            </h1>
-            <p className="mx-auto mt-3 max-w-xs text-base leading-relaxed text-muted-foreground">
-              {spa.tagline}
-            </p>
-            <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Select your preferred massage, choose an available appointment
-              time, and securely complete your booking.
-            </p>
-            <Button asChild size="lg" className="mt-7 min-w-40">
-              <Link to="/book">Book Your Private Massage</Link>
-            </Button>
+          <section className="stagger-in pt-6 pb-12 text-center">
+            {/* Brand banner */}
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#100e12] shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
+              <img
+                src={spa.bannerSrc ?? "/banner-hero.svg"}
+                alt=""
+                className="h-auto w-full object-cover"
+                width={1200}
+                height={480}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#100e12]/40 via-transparent to-transparent" />
+            </div>
+
+            <div className="mt-10">
+              <BrandLogo className="mx-auto h-12 w-auto max-w-[260px] sm:h-14" />
+              <p className="section-label mt-6">Private wellness</p>
+              <h1 className="mt-3 font-serif text-3xl font-medium tracking-tight text-plum-deep sm:text-4xl">
+                {spa.name}
+              </h1>
+              <p className="mx-auto mt-3 max-w-xs text-base leading-relaxed text-muted-foreground">
+                {spa.tagline}
+              </p>
+              <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                Select your preferred massage, choose an available appointment
+                time, and securely complete your booking.
+              </p>
+              <Button asChild size="lg" className="mt-7 min-w-40">
+                <Link to="/book">Book Your Private Massage</Link>
+              </Button>
+            </div>
           </section>
 
           <div className="hairline" />
