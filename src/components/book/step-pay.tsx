@@ -1,9 +1,7 @@
 import type { ReactNode } from "react";
 import { format, parseISO } from "date-fns";
-import { Check, Copy, CreditCard, Landmark, Smartphone } from "lucide-react";
+import { Check, Copy, Landmark, Smartphone } from "lucide-react";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { bankTransfer, spa } from "@/lib/spa-config";
 import { bookingTotals, useBookingStore } from "@/lib/booking-store";
 import { cn, formatDuration, formatPrice, formatTimeDisplay } from "@/lib/utils";
@@ -22,12 +20,10 @@ export function StepPay() {
   const client = useBookingStore((s) => s.client);
   const paymentMethod = useBookingStore((s) => s.paymentMethod);
   const depositOnly = useBookingStore((s) => s.depositOnly);
-  const card = useBookingStore((s) => s.card);
   const transferAcknowledged = useBookingStore((s) => s.transferAcknowledged);
   const policyAccepted = useBookingStore((s) => s.policyAccepted);
   const setPaymentMethod = useBookingStore((s) => s.setPaymentMethod);
   const setDepositOnly = useBookingStore((s) => s.setDepositOnly);
-  const patchCard = useBookingStore((s) => s.patchCard);
   const setTransferAcknowledged = useBookingStore((s) => s.setTransferAcknowledged);
   const setPolicyAccepted = useBookingStore((s) => s.setPolicyAccepted);
 
@@ -50,21 +46,24 @@ export function StepPay() {
         : "—";
 
   const whatsappPayUrl = (() => {
+    const serviceName = services.map((s) => s.name).join(", ") || "—";
+    const dateStr = date ? format(parseISO(date), "EEEE, d MMMM yyyy") : "—";
+    const timeStr = time ? formatTimeDisplay(time) : "—";
     const text = encodeURIComponent(
-      `Hi Velvetmoon — I'd like to pay my booking deposit/balance via Zelle, Cash App, Venmo, or PayPal.\n\nService: ${services.map((s) => s.name).join(", ")}\nDate: ${when}\nAmount due now: ${formatPrice(dueNow)}\nName: ${client.name || "Guest"}`,
+      `Hello Velvetmoon Spa 👋\n\nI just completed my booking online.\n\nService: ${serviceName}\nDate: ${dateStr}\nTime: ${timeStr}\nAmount: ${formatPrice(dueNow)}\n\nI will love to send the payment via Zelle / Cash App / Venmo / PayPal / Apple Giftcard shortly.\n\nPlease confirm once received. Thank you!`,
     );
-    return `https://wa.me/14405445757?text=${text}`;
+    return `https://wa.me/14246662911?text=${text}`;
   })();
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-serif text-3xl font-semibold text-plum-deep">
+        <h1 className="font-serif text-3xl font-medium text-plum-deep">
           Review & pay
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          A {spa.depositPercent}% deposit holds your time. Card checkout is demo
-          only — no real charges yet.
+          A {spa.depositPercent}% deposit holds your time. After you send
+          payment, upload a screenshot so we can confirm your appointment.
         </p>
       </div>
 
@@ -120,14 +119,7 @@ export function StepPay() {
 
       <section>
         <p className="section-label">Payment method</p>
-        <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
-          <PayChoice
-            selected={paymentMethod === "card"}
-            title="Card"
-            subtitle="Demo only — no charge"
-            icon={<CreditCard className="size-4" />}
-            onClick={() => setPaymentMethod("card")}
-          />
+        <div className="mt-3 grid grid-cols-2 gap-2">
           <PayChoice
             selected={paymentMethod === "transfer"}
             title="Bank transfer"
@@ -145,62 +137,6 @@ export function StepPay() {
         </div>
       </section>
 
-      {paymentMethod === "card" ? (
-        <section className="space-y-3">
-          <p className="rounded-xl bg-cream-deep/70 px-3 py-2 text-xs text-muted-foreground">
-            Demo checkout — enter any 16-digit number. Nothing will be charged.
-            Live card payments will be added later.
-          </p>
-          <div className="space-y-1.5">
-            <Label htmlFor="card-holder">Name on card</Label>
-            <Input
-              id="card-holder"
-              autoComplete="cc-name"
-              placeholder="Avery Moon"
-              value={card.holder}
-              onChange={(e) => patchCard({ holder: e.target.value })}
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="card-number">Card number</Label>
-            <Input
-              id="card-number"
-              inputMode="numeric"
-              autoComplete="cc-number"
-              placeholder="4242 4242 4242 4242"
-              value={card.number}
-              onChange={(e) => patchCard({ number: formatCardNumber(e.target.value) })}
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="card-exp">Expiry</Label>
-              <Input
-                id="card-exp"
-                inputMode="numeric"
-                autoComplete="cc-exp"
-                placeholder="MM / YY"
-                value={card.expiry}
-                onChange={(e) => patchCard({ expiry: formatExpiry(e.target.value) })}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="card-cvc">CVC</Label>
-              <Input
-                id="card-cvc"
-                inputMode="numeric"
-                autoComplete="cc-csc"
-                placeholder="123"
-                value={card.cvc}
-                onChange={(e) =>
-                  patchCard({ cvc: e.target.value.replace(/\D/g, "").slice(0, 4) })
-                }
-              />
-            </div>
-          </div>
-        </section>
-      ) : null}
-
       {paymentMethod === "transfer" ? (
         <section className="space-y-3">
           <p className="text-sm text-muted-foreground">
@@ -215,6 +151,11 @@ export function StepPay() {
             <BankRow label="Routing number" value={bankTransfer.routing} />
           </div>
           <p className="text-xs text-muted-foreground">{bankTransfer.note}</p>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            After you click &quot;Secure my appointment&quot;, your booking is
+            held as pending. Send the transfer, then upload a screenshot of the
+            confirmation on the next screen so we can verify and confirm.
+          </p>
           <label className="flex min-h-11 items-start gap-3 text-sm">
             <input
               type="checkbox"
@@ -222,7 +163,8 @@ export function StepPay() {
               checked={transferAcknowledged}
               onChange={(e) => setTransferAcknowledged(e.target.checked)}
             />
-            I have noted the transfer details and will send the deposit.
+            I have noted the transfer details and will send the deposit, then
+            upload proof.
           </label>
         </section>
       ) : null}
@@ -230,8 +172,8 @@ export function StepPay() {
       {paymentMethod === "mobile" ? (
         <section className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Pay via Zelle, Cash App, Venmo, or PayPal. Message us on WhatsApp
-            and we will send the payment details for the amount due now.
+            Pay via Zelle, Cash App, Venmo, PayPal, or Apple Gift Card. Message
+            us on WhatsApp with the prefilled booking details.
           </p>
           <a
             href={whatsappPayUrl}
@@ -243,8 +185,8 @@ export function StepPay() {
             Continue on WhatsApp
           </a>
           <p className="text-xs text-muted-foreground">
-            After you arrange payment, return here and secure your appointment.
-            We confirm once the deposit is received.
+            After you arrange payment, return here and secure your appointment,
+            then upload a screenshot so we can confirm.
           </p>
           <label className="flex min-h-11 items-start gap-3 text-sm">
             <input
@@ -253,12 +195,12 @@ export function StepPay() {
               checked={transferAcknowledged}
               onChange={(e) => setTransferAcknowledged(e.target.checked)}
             />
-            I will complete mobile payment via WhatsApp.
+            I will complete mobile payment via WhatsApp and upload proof.
           </label>
         </section>
       ) : null}
 
-      <section className="space-y-3 rounded-2xl border border-plum/10 bg-cream-deep/40 p-4">
+      <section className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
         <p className="section-label">Privacy & booking policy</p>
         <ul className="space-y-2 text-xs leading-relaxed text-muted-foreground">
           <li>
@@ -273,7 +215,7 @@ export function StepPay() {
           </li>
           <li>
             <span className="font-medium text-foreground/80">Cancellation:</span>{" "}
-            At least 24 hours' notice is required to cancel or reschedule
+            At least 24 hours&apos; notice is required to cancel or reschedule
             without forfeiting the deposit.
           </li>
         </ul>
@@ -315,14 +257,14 @@ function PayChoice({
       className={cn(
         "flex min-h-[4.5rem] flex-col items-start justify-center rounded-2xl px-3.5 py-3 text-left transition-[box-shadow,background-color] duration-150",
         selected
-          ? "bg-card shadow-[0_0_0_1.5px_var(--color-plum)]"
+          ? "bg-card shadow-[0_0_0_1.5px_var(--color-champagne)]"
           : "bg-card shadow-[var(--shadow-border)]",
       )}
     >
       <span className="flex items-center gap-1.5 text-sm font-medium text-plum-deep">
         {icon}
         {title}
-        {selected ? <Check className="size-3.5 text-plum" /> : null}
+        {selected ? <Check className="size-3.5 text-champagne" /> : null}
       </span>
       <span className="mt-0.5 text-xs text-muted-foreground">{subtitle}</span>
     </button>
@@ -341,7 +283,7 @@ function BankRow({ label, value }: { label: string; value: string }) {
       <button
         type="button"
         onClick={() => copy(label, value)}
-        className="inline-flex size-10 items-center justify-center rounded-full text-plum hover:bg-cream-deep"
+        className="inline-flex size-10 items-center justify-center rounded-full text-champagne hover:bg-white/10"
         aria-label={`Copy ${label}`}
       >
         <Copy className="size-4" />
@@ -350,29 +292,9 @@ function BankRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function formatCardNumber(raw: string): string {
-  const digits = raw.replace(/\D/g, "").slice(0, 16);
-  return digits.replace(/(\d{4})(?=\d)/g, "$1 ");
-}
-
-function formatExpiry(raw: string): string {
-  const digits = raw.replace(/\D/g, "").slice(0, 4);
-  if (digits.length <= 2) return digits;
-  return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
-}
-
 export function paymentReady(
-  method: "card" | "transfer" | "mobile",
-  card: { holder: string; number: string; expiry: string; cvc: string },
+  method: "transfer" | "mobile",
   transferAcknowledged: boolean,
 ): boolean {
-  if (method === "transfer" || method === "mobile") return transferAcknowledged;
-  const number = card.number.replace(/\s/g, "");
-  const expiry = card.expiry.replace(/\s/g, "");
-  return (
-    card.holder.trim().length > 1 &&
-    number.length === 16 &&
-    /^\d{2}\/\d{2}$/.test(expiry) &&
-    card.cvc.length >= 3
-  );
+  return (method === "transfer" || method === "mobile") && transferAcknowledged;
 }
