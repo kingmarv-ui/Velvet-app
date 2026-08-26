@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/spa/site-footer";
 import { MoonMark } from "@/components/spa/moon-mark";
 import { Button } from "@/components/ui/button";
 import type { SavedBooking } from "@/lib/booking-store";
-import { getBookingFn, uploadProofFn } from "@/lib/bookings.server";
+import { getBookingFn, uploadProofFn } from "@/lib/bookings";
 import { bankTransfer, contact, spa } from "@/lib/spa-config";
 import { formatDuration, formatPrice, formatTimeDisplay } from "@/lib/utils";
 
