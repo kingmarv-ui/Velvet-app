@@ -5,12 +5,12 @@ import { MoonMark } from "@/components/spa/moon-mark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { BookingStatus, SavedBooking } from "@/lib/booking-store";
 import {
-  loadBookings,
-  updateBookingStatus,
-  type BookingStatus,
-  type SavedBooking,
-} from "@/lib/booking-store";
+  listBookingsFn,
+  updateBookingFn,
+  verifyAdminPasswordFn,
+} from "@/lib/bookings.server";
 import { spa } from "@/lib/spa-config";
 import { formatPrice, formatTimeDisplay } from "@/lib/utils";
 import { toast } from "sonner";
@@ -19,54 +19,64 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-/** Set VITE_ADMIN_PASSWORD in Vercel Environment Variables to change this. */
-const ADMIN_PASSWORD =
-  (import.meta.env.VITE_ADMIN_PASSWORD as string | undefined)?.trim() ||
-  "VelvetMoon2026!";
-
 const AUTH_KEY = "velvetmoon-admin-auth";
+const PASS_KEY = "velvetmoon-admin-pass";
 
-function isUnlocked(): boolean {
-  if (typeof window === "undefined") return false;
+function readSession(): { unlocked: boolean; password: string } {
+  if (typeof window === "undefined") return { unlocked: false, password: "" };
   try {
-    return window.sessionStorage.getItem(AUTH_KEY) === "1";
+    const unlocked = window.sessionStorage.getItem(AUTH_KEY) === "1";
+    const password = window.sessionStorage.getItem(PASS_KEY) || "";
+    return { unlocked: unlocked && Boolean(password), password };
   } catch {
-    return false;
+    return { unlocked: false, password: "" };
   }
 }
 
-function setUnlocked(value: boolean) {
+function writeSession(unlocked: boolean, password: string) {
   try {
-    if (value) window.sessionStorage.setItem(AUTH_KEY, "1");
-    else window.sessionStorage.removeItem(AUTH_KEY);
+    if (unlocked && password) {
+      window.sessionStorage.setItem(AUTH_KEY, "1");
+      window.sessionStorage.setItem(PASS_KEY, password);
+    } else {
+      window.sessionStorage.removeItem(AUTH_KEY);
+      window.sessionStorage.removeItem(PASS_KEY);
+    }
   } catch {
-    // ignore storage errors
+    // ignore
   }
 }
 
-function AdminGate({ onUnlock }: { onUnlock: () => void }) {
+function AdminGate({
+  onUnlock,
+}: {
+  onUnlock: (password: string) => void;
+}) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitting(true);
     setError(false);
-
-    // Small delay so the UI feels responsive
-    window.setTimeout(() => {
-      if (password === ADMIN_PASSWORD) {
-        setUnlocked(true);
-        onUnlock();
+    try {
+      const result = await verifyAdminPasswordFn({ data: { password } });
+      if (result.ok) {
+        writeSession(true, password);
+        onUnlock(password);
         toast.success("Admin unlocked");
       } else {
         setError(true);
         setPassword("");
         toast.error("Incorrect password");
       }
+    } catch {
+      setError(true);
+      toast.error("Could not verify password");
+    } finally {
       setSubmitting(false);
-    }, 200);
+    }
   }
 
   return (
@@ -109,7 +119,9 @@ function AdminGate({ onUnlock }: { onUnlock: () => void }) {
                   setPassword(e.target.value);
                   setError(false);
                 }}
-                className={error ? "border-red-500/60 focus-visible:ring-red-500/30" : ""}
+                className={
+                  error ? "border-red-500/60 focus-visible:ring-red-500/30" : ""
+                }
                 placeholder="••••••••"
               />
               {error ? (
@@ -133,39 +145,62 @@ function AdminGate({ onUnlock }: { onUnlock: () => void }) {
 
 function AdminPage() {
   const [unlocked, setIsUnlocked] = useState(false);
+  const [password, setPassword] = useState("");
   const [ready, setReady] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [bookings, setBookings] = useState<SavedBooking[]>([]);
 
   useEffect(() => {
-    setIsUnlocked(isUnlocked());
+    const session = readSession();
+    setIsUnlocked(session.unlocked);
+    setPassword(session.password);
     setReady(true);
   }, []);
 
-  function refresh() {
-    setBookings(loadBookings());
+  async function refresh(pass: string) {
+    setLoading(true);
+    try {
+      const rows = await listBookingsFn({ data: { password: pass } });
+      setBookings(rows);
+    } catch {
+      toast.error("Could not load bookings. Check the password or try again.");
+      writeSession(false, "");
+      setIsUnlocked(false);
+      setPassword("");
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    if (unlocked) refresh();
-  }, [unlocked]);
+    if (unlocked && password) void refresh(password);
+  }, [unlocked, password]);
 
-  function setStatus(id: string, status: BookingStatus) {
-    const updated = updateBookingStatus(id, status);
-    if (updated) {
-      toast.success(
-        status === "confirmed"
-          ? "Booking confirmed"
-          : status === "rejected"
-            ? "Booking rejected"
-            : "Status updated",
-      );
-      refresh();
+  async function setStatus(id: string, status: BookingStatus) {
+    try {
+      const updated = await updateBookingFn({
+        data: { password, id, status },
+      });
+      if (updated) {
+        toast.success(
+          status === "confirmed"
+            ? "Booking confirmed"
+            : status === "rejected"
+              ? "Booking rejected"
+              : "Status updated",
+        );
+        await refresh(password);
+      }
+    } catch {
+      toast.error("Could not update booking");
     }
   }
 
   function lock() {
-    setUnlocked(false);
+    writeSession(false, "");
     setIsUnlocked(false);
+    setPassword("");
+    setBookings([]);
     toast.message("Admin locked");
   }
 
@@ -178,7 +213,14 @@ function AdminPage() {
   }
 
   if (!unlocked) {
-    return <AdminGate onUnlock={() => setIsUnlocked(true)} />;
+    return (
+      <AdminGate
+        onUnlock={(pass) => {
+          setPassword(pass);
+          setIsUnlocked(true);
+        }}
+      />
+    );
   }
 
   const pending = bookings.filter((b) => b.status === "pending");
@@ -198,6 +240,9 @@ function AdminPage() {
             <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Admin
             </span>
+            <Button size="sm" variant="outline" onClick={() => void refresh(password)}>
+              Refresh
+            </Button>
             <Button size="sm" variant="outline" onClick={lock}>
               Lock
             </Button>
@@ -212,9 +257,13 @@ function AdminPage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Verify payment screenshots and confirm or reject appointments.
-            Data is stored in this browser only.
+            Bookings are saved on the server and visible from any device.
           </p>
         </div>
+
+        {loading ? (
+          <p className="text-sm text-muted-foreground">Loading bookings…</p>
+        ) : null}
 
         <section>
           <h2 className="section-label">Pending payment ({pending.length})</h2>
@@ -267,6 +316,9 @@ function BookingRow({
           <p className="text-sm text-muted-foreground">
             {booking.client.name} · {booking.client.phone}
           </p>
+          {booking.client.email ? (
+            <p className="text-sm text-muted-foreground">{booking.client.email}</p>
+          ) : null}
           <p className="mt-1 text-sm">
             {when} · {booking.services.map((s) => s.name).join(", ")}
           </p>
@@ -302,7 +354,8 @@ function BookingRow({
             className="max-h-56 rounded-xl object-contain bg-white/10"
           />
         </div>
-      ) : booking.paymentMethod === "mobile" || booking.paymentMethod === "transfer" ? (
+      ) : booking.paymentMethod === "mobile" ||
+        booking.paymentMethod === "transfer" ? (
         <p className="mt-3 text-xs text-muted-foreground">
           No screenshot uploaded yet.
         </p>
