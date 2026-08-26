@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { MoonMark } from "@/components/spa/moon-mark";
 import { spa } from "@/lib/spa-config";
 import { bookingTotals, useBookingStore } from "@/lib/booking-store";
-import { createBookingFn } from "@/lib/bookings.server";
+import { createBookingFn } from "@/lib/bookings";
 import { formatPrice } from "@/lib/utils";
 
 type Step = 1 | 2 | 3 | 4;
@@ -88,7 +88,6 @@ export function BookingFlow() {
         return;
       }
 
-      // Persist to the database so admin can see it from any device
       await createBookingFn({
         data: {
           id: booking.id,
