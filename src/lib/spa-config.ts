@@ -61,8 +61,8 @@ export const hours: DayHours[] = [
 /** Full booking policy & disclaimer shown on /policies and summarized at checkout. */
 export const policies = [
   {
-    title: "Professional services only",
-    body: "Velvet Moon Wellness provides wellness and therapeutic massage services only. We do not offer sexual, erotic, or any inappropriate services. Bookings that imply otherwise will be cancelled.",
+    title: "Wellness & relaxation services",
+    body: "Our sessions are offered for relaxation, personal wellness, and stress relief. Services are provided in a professional, respectful environment.",
   },
   {
     title: "Deposit & confirmation",
