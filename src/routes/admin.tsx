@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { format, parseISO } from "date-fns";
 import { MoonMark } from "@/components/spa/moon-mark";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   loadBookings,
   updateBookingStatus,
@@ -17,16 +19,135 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
+/** Set VITE_ADMIN_PASSWORD in Vercel Environment Variables to change this. */
+const ADMIN_PASSWORD =
+  (import.meta.env.VITE_ADMIN_PASSWORD as string | undefined)?.trim() ||
+  "VelvetMoon2026!";
+
+const AUTH_KEY = "velvetmoon-admin-auth";
+
+function isUnlocked(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.sessionStorage.getItem(AUTH_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setUnlocked(value: boolean) {
+  try {
+    if (value) window.sessionStorage.setItem(AUTH_KEY, "1");
+    else window.sessionStorage.removeItem(AUTH_KEY);
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function AdminGate({ onUnlock }: { onUnlock: () => void }) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(false);
+
+    // Small delay so the UI feels responsive
+    window.setTimeout(() => {
+      if (password === ADMIN_PASSWORD) {
+        setUnlocked(true);
+        onUnlock();
+        toast.success("Admin unlocked");
+      } else {
+        setError(true);
+        setPassword("");
+        toast.error("Incorrect password");
+      }
+      setSubmitting(false);
+    }, 200);
+  }
+
+  return (
+    <div className="page-shell min-h-screen">
+      <header className="border-b border-white/8">
+        <div className="narrow flex h-14 items-center justify-between px-5">
+          <Link to="/" className="flex items-center gap-2">
+            <MoonMark className="size-7" />
+            <span className="font-serif text-base font-semibold text-plum-deep">
+              {spa.name}
+            </span>
+          </Link>
+          <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Admin
+          </span>
+        </div>
+      </header>
+
+      <main className="narrow flex flex-col items-center px-5 py-16">
+        <div className="w-full max-w-sm space-y-6">
+          <div className="text-center">
+            <h1 className="font-serif text-2xl font-semibold text-plum-deep">
+              Admin access
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Enter the admin password to view and manage bookings.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="admin-password">Password</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                autoComplete="current-password"
+                autoFocus
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError(false);
+                }}
+                className={error ? "border-red-500/60 focus-visible:ring-red-500/30" : ""}
+                placeholder="••••••••"
+              />
+              {error ? (
+                <p className="text-xs text-red-400">Incorrect password. Try again.</p>
+              ) : null}
+            </div>
+
+            <Button type="submit" className="w-full" disabled={submitting || !password}>
+              {submitting ? "Checking…" : "Unlock admin"}
+            </Button>
+          </form>
+
+          <p className="text-center text-xs text-muted-foreground">
+            Session stays unlocked until you close this browser tab.
+          </p>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 function AdminPage() {
+  const [unlocked, setIsUnlocked] = useState(false);
+  const [ready, setReady] = useState(false);
   const [bookings, setBookings] = useState<SavedBooking[]>([]);
+
+  useEffect(() => {
+    setIsUnlocked(isUnlocked());
+    setReady(true);
+  }, []);
 
   function refresh() {
     setBookings(loadBookings());
   }
 
   useEffect(() => {
-    refresh();
-  }, []);
+    if (unlocked) refresh();
+  }, [unlocked]);
 
   function setStatus(id: string, status: BookingStatus) {
     const updated = updateBookingStatus(id, status);
@@ -42,6 +163,24 @@ function AdminPage() {
     }
   }
 
+  function lock() {
+    setUnlocked(false);
+    setIsUnlocked(false);
+    toast.message("Admin locked");
+  }
+
+  if (!ready) {
+    return (
+      <div className="page-shell grid min-h-screen place-items-center">
+        <p className="text-sm text-muted-foreground">Loading…</p>
+      </div>
+    );
+  }
+
+  if (!unlocked) {
+    return <AdminGate onUnlock={() => setIsUnlocked(true)} />;
+  }
+
   const pending = bookings.filter((b) => b.status === "pending");
   const others = bookings.filter((b) => b.status !== "pending");
 
@@ -55,9 +194,14 @@ function AdminPage() {
               {spa.name}
             </span>
           </Link>
-          <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            Admin
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              Admin
+            </span>
+            <Button size="sm" variant="outline" onClick={lock}>
+              Lock
+            </Button>
+          </div>
         </div>
       </header>
 
