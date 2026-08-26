@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { format, parseISO } from "date-fns";
 import { Check, Copy, Landmark, Smartphone } from "lucide-react";
 import { toast } from "sonner";
@@ -201,22 +202,40 @@ export function StepPay() {
       ) : null}
 
       <section className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
-        <p className="section-label">Privacy & booking policy</p>
-        <ul className="space-y-2 text-xs leading-relaxed text-muted-foreground">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="section-label">Booking policy & disclaimer</p>
+          <Link
+            to="/policies"
+            className="text-xs font-medium text-champagne underline-offset-4 hover:underline"
+          >
+            Read full policies
+          </Link>
+        </div>
+        <ul className="space-y-2.5 text-xs leading-relaxed text-muted-foreground">
+          <li>
+            <span className="font-medium text-foreground/80">Deposit & confirmation:</span>{" "}
+            A 50% deposit holds your preferred time and is applied in full toward
+            your treatment. Your booking is confirmed after payment is verified.
+          </li>
+          <li>
+            <span className="font-medium text-foreground/80">Cancellation & rescheduling:</span>{" "}
+            Please give at least 24 hours' notice to cancel or reschedule. With 24
+            or more hours' notice, we're happy to move your deposit to a new date
+            (or refund it when that's practical). Cancellations with less than 24
+            hours' notice, or missed appointments, generally mean the deposit is
+            non-refundable. We'll always try to rebook you when we can. Genuine
+            emergencies are considered case by case—please message us as soon as
+            you can.
+          </li>
+          <li>
+            <span className="font-medium text-foreground/80">Professional services only:</span>{" "}
+            Therapeutic wellness massage only. Inappropriate requests will be
+            cancelled.
+          </li>
           <li>
             <span className="font-medium text-foreground/80">Privacy:</span>{" "}
-            Client information is handled discreetly and used only for
-            appointment management.
-          </li>
-          <li>
-            <span className="font-medium text-foreground/80">Booking:</span>{" "}
-            Appointments are confirmed only after the required payment or
-            deposit has been successfully received.
-          </li>
-          <li>
-            <span className="font-medium text-foreground/80">Cancellation:</span>{" "}
-            At least 24 hours' notice is required to cancel or reschedule
-            without forfeiting the deposit.
+            Client information is handled discreetly and used only for appointment
+            management.
           </li>
         </ul>
         <label className="flex min-h-11 items-start gap-3 text-sm">
@@ -226,7 +245,13 @@ export function StepPay() {
             checked={policyAccepted}
             onChange={(e) => setPolicyAccepted(e.target.checked)}
           />
-          I have read and accept the privacy and booking policies.
+          <span>
+            I have read and agree to the{" "}
+            <Link to="/policies" className="text-champagne underline-offset-2 hover:underline">
+              Velvet Moon Wellness booking policies
+            </Link>
+            .
+          </span>
         </label>
       </section>
 

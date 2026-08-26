@@ -58,30 +58,39 @@ export const hours: DayHours[] = [
   { day: "Saturday", open: "07:00", close: "23:00" },
 ];
 
+/** Full booking policy & disclaimer shown on /policies and summarized at checkout. */
 export const policies = [
   {
     title: "Professional services only",
-    body: "Velvet Moon Wellness provides wellness and therapeutic treatments exclusively. We do not offer any inappropriate, sexual, or out-of-scope services. Bookings that imply otherwise will be cancelled without refund of the deposit.",
+    body: "Velvet Moon Wellness provides wellness and therapeutic massage services only. We do not offer sexual, erotic, or any inappropriate services. Bookings that imply otherwise will be cancelled.",
   },
   {
-    title: "Cancellation & reschedule",
-    body: "Please give at least 24 hours' notice to cancel or reschedule. Changes made with less than 24 hours' notice, or missed appointments, forfeit the deposit. We will always try to rebook you when we can.",
+    title: "Deposit & confirmation",
+    body: "A 50% deposit holds your preferred time and is applied in full toward your treatment. Your booking is confirmed after payment is verified. The remaining balance is due at the start of your appointment.",
   },
   {
-    title: "Deposit to confirm",
-    body: "A 50% deposit is required to complete and confirm your booking. The remaining balance is due at the start of your appointment. Deposits are applied in full toward your treatment.",
+    title: "Cancellation & rescheduling",
+    body: "Please give at least 24 hours' notice to cancel or reschedule. With 24 or more hours' notice, we're happy to move your deposit to a new date (or refund it when that's practical). Cancellations with less than 24 hours' notice, or missed appointments, generally mean the deposit is non-refundable. We'll always try to rebook you when we can. Genuine emergencies are considered case by case—please message us as soon as you can.",
   },
   {
-    title: "Arrival",
-    body: "Kindly arrive 10 minutes early so we can settle you in. Late arrivals may shorten the treatment so the next guest is not delayed. If you are running behind, a quick message helps us hold the room.",
+    title: "Arrival & late policy",
+    body: "Please aim to arrive about 10 minutes early so we can settle you in. If you're running late, a quick message helps. Late arrivals may mean a slightly shorter session so the next guest isn't delayed.",
   },
   {
-    title: "Health & comfort",
-    body: "Share allergies, injuries, pregnancy, or medical conditions in the notes when you book — or tell your therapist before we begin. We reserve the right to adapt or decline a treatment when it would not be safe.",
+    title: "Health & safety",
+    body: "Please share anything we should know when you book (or before we begin)—injuries, allergies, pregnancy, or medical conditions. We may adapt a treatment, or in rare cases decline one, when it wouldn't be safe or appropriate.",
   },
   {
-    title: "Hygiene & respect",
-    body: "Please reschedule if you are unwell. Draping is always used; undress only to your comfort. Phones on silent, and a quiet room for you and for others.",
+    title: "Conduct & environment",
+    body: "We're here for a calm, professional experience. If conduct is inappropriate or outside the scope of wellness services, we may end the session and decline future bookings.",
+  },
+  {
+    title: "Privacy",
+    body: "Your contact and booking details are used only to manage your appointment and related communication. We handle client information discreetly.",
+  },
+  {
+    title: "Payment proof",
+    body: "For bank transfer or mobile payment, please use the details provided and upload a clear payment screenshot when asked so we can verify and confirm your booking.",
   },
 ];
 
