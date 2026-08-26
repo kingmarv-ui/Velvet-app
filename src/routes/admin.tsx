@@ -10,7 +10,7 @@ import {
   listBookingsFn,
   updateBookingFn,
   verifyAdminPasswordFn,
-} from "@/lib/bookings.server";
+} from "@/lib/bookings";
 import { spa } from "@/lib/spa-config";
 import { formatPrice, formatTimeDisplay } from "@/lib/utils";
 import { toast } from "sonner";
