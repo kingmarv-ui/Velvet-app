@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { MoonMark } from "@/components/spa/moon-mark";
 import { spa } from "@/lib/spa-config";
 import { bookingTotals, useBookingStore } from "@/lib/booking-store";
+import { createBookingFn } from "@/lib/bookings.server";
 import { formatPrice } from "@/lib/utils";
 
 type Step = 1 | 2 | 3 | 4;
@@ -80,16 +81,41 @@ export function BookingFlow() {
 
   async function submit() {
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 900));
-    const booking = confirmBooking();
-    if (!booking) {
+    try {
+      const booking = confirmBooking();
+      if (!booking) {
+        toast.error("We couldn’t complete that booking. Please review your details.");
+        return;
+      }
+
+      // Persist to the database so admin can see it from any device
+      await createBookingFn({
+        data: {
+          id: booking.id,
+          serviceIds: booking.serviceIds,
+          services: booking.services,
+          date: booking.date,
+          time: booking.time,
+          durationHours: booking.durationHours,
+          locationType: booking.locationType,
+          client: booking.client,
+          paymentMethod: booking.paymentMethod,
+          depositOnly: booking.depositOnly,
+          total: booking.total,
+          paid: booking.paid,
+          status: booking.status,
+        },
+      });
+
+      const id = booking.id;
+      resetFlow();
+      await navigate({ to: "/confirmed", search: { id } });
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not save your booking. Please try again.");
+    } finally {
       setSubmitting(false);
-      toast.error("We couldn’t complete that booking. Please review your details.");
-      return;
     }
-    const id = booking.id;
-    resetFlow();
-    await navigate({ to: "/confirmed", search: { id } });
   }
 
   return (

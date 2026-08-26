@@ -105,10 +105,10 @@ export type CreateBookingInput = {
   status: BookingStatus;
 };
 
-export const createBookingFn = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data: CreateBookingInput }) => {
-    const input = data;
-    if (!input?.id || !input.date || !input.time || !input.client?.name) {
+export const createBookingFn = createServerFn({ method: "POST" })
+  .validator((data: CreateBookingInput) => data)
+  .handler(async ({ data }) => {
+    if (!data?.id || !data.date || !data.time || !data.client?.name) {
       throw new Error("Invalid booking payload");
     }
 
@@ -123,28 +123,28 @@ export const createBookingFn = createServerFn({ method: "POST" }).handler(
       )
       on conflict (id) do nothing`,
       [
-        input.id,
-        JSON.stringify(input.serviceIds),
-        JSON.stringify(input.services),
-        input.date,
-        input.time,
-        input.durationHours,
-        input.locationType,
-        JSON.stringify(input.client),
-        input.paymentMethod,
-        input.depositOnly,
-        input.total,
-        input.paid,
-        input.status,
+        data.id,
+        JSON.stringify(data.serviceIds),
+        JSON.stringify(data.services),
+        data.date,
+        data.time,
+        data.durationHours,
+        data.locationType,
+        JSON.stringify(data.client),
+        data.paymentMethod,
+        data.depositOnly,
+        data.total,
+        data.paid,
+        data.status,
       ],
     );
 
-    return { ok: true as const, id: input.id };
-  },
-);
+    return { ok: true as const, id: data.id };
+  });
 
-export const getBookingFn = createServerFn({ method: "GET" }).handler(
-  async ({ data }: { data?: { id?: string } }) => {
+export const getBookingFn = createServerFn({ method: "POST" })
+  .validator((data: { id: string }) => data)
+  .handler(async ({ data }) => {
     const id = data?.id?.trim();
     if (!id) return null;
 
@@ -155,31 +155,29 @@ export const getBookingFn = createServerFn({ method: "GET" }).handler(
     );
     if (!rows.length) return null;
     return rowToBooking(rows[0]);
-  },
-);
+  });
 
-export const listBookingsFn = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data?: { password?: string } }) => {
+export const listBookingsFn = createServerFn({ method: "POST" })
+  .validator((data: { password: string }) => data)
+  .handler(async ({ data }) => {
     assertAdmin(data?.password);
     const sql = await getSql();
     const rows = await sql.query<BookingRow>(
       `select * from bookings order by created_at desc limit 200`,
     );
     return rows.map(rowToBooking);
-  },
-);
+  });
 
-export const updateBookingFn = createServerFn({ method: "POST" }).handler(
-  async ({
-    data,
-  }: {
-    data: {
-      password?: string;
+export const updateBookingFn = createServerFn({ method: "POST" })
+  .validator(
+    (data: {
+      password: string;
       id: string;
       status?: BookingStatus;
       proofDataUrl?: string | null;
-    };
-  }) => {
+    }) => data,
+  )
+  .handler(async ({ data }) => {
     assertAdmin(data?.password);
     const id = data.id?.trim();
     if (!id) throw new Error("Missing booking id");
@@ -212,22 +210,17 @@ export const updateBookingFn = createServerFn({ method: "POST" }).handler(
       [id],
     );
     return rows.length ? rowToBooking(rows[0]) : null;
-  },
-);
+  });
 
 /** Public: client uploads payment proof (no admin password). */
-export const uploadProofFn = createServerFn({ method: "POST" }).handler(
-  async ({
-    data,
-  }: {
-    data: { id: string; proofDataUrl: string };
-  }) => {
+export const uploadProofFn = createServerFn({ method: "POST" })
+  .validator((data: { id: string; proofDataUrl: string }) => data)
+  .handler(async ({ data }) => {
     const id = data?.id?.trim();
     const proof = data?.proofDataUrl;
     if (!id || !proof || !proof.startsWith("data:image/")) {
       throw new Error("Invalid proof upload");
     }
-    // Cap ~5MB base64 payload
     if (proof.length > 7_000_000) {
       throw new Error("Image too large");
     }
@@ -245,11 +238,10 @@ export const uploadProofFn = createServerFn({ method: "POST" }).handler(
       [id],
     );
     return rows.length ? rowToBooking(rows[0]) : null;
-  },
-);
+  });
 
-export const verifyAdminPasswordFn = createServerFn({ method: "POST" }).handler(
-  async ({ data }: { data?: { password?: string } }) => {
+export const verifyAdminPasswordFn = createServerFn({ method: "POST" })
+  .validator((data: { password: string }) => data)
+  .handler(async ({ data }) => {
     return { ok: data?.password === adminPassword() };
-  },
-);
+  });
