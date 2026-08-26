@@ -6,11 +6,8 @@ import { toast } from "sonner";
 import { SiteFooter } from "@/components/spa/site-footer";
 import { MoonMark } from "@/components/spa/moon-mark";
 import { Button } from "@/components/ui/button";
-import {
-  loadBooking,
-  updateBookingStatus,
-  type SavedBooking,
-} from "@/lib/booking-store";
+import type { SavedBooking } from "@/lib/booking-store";
+import { getBookingFn, uploadProofFn } from "@/lib/bookings.server";
 import { bankTransfer, contact, spa } from "@/lib/spa-config";
 import { formatDuration, formatPrice, formatTimeDisplay } from "@/lib/utils";
 
@@ -29,13 +26,22 @@ function ConfirmedPage() {
     undefined,
   );
 
-  useEffect(() => {
-    setBooking(id ? (loadBooking(id) ?? null) : null);
-  }, [id]);
-
-  function refresh() {
-    if (id) setBooking(loadBooking(id) ?? null);
+  async function refresh() {
+    if (!id) {
+      setBooking(null);
+      return;
+    }
+    try {
+      const row = await getBookingFn({ data: { id } });
+      setBooking(row);
+    } catch {
+      setBooking(null);
+    }
   }
+
+  useEffect(() => {
+    void refresh();
+  }, [id]);
 
   return (
     <div className="page-shell">
@@ -78,7 +84,7 @@ function EmptyConfirmation() {
         We couldn’t find that booking
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        It may have been on another device. Start a new appointment anytime.
+        Double-check the link, or start a new appointment anytime.
       </p>
       <Button asChild className="mt-6">
         <Link to="/book">Book now</Link>
@@ -111,11 +117,25 @@ function PendingCard({
     setUploading(true);
     const reader = new FileReader();
     reader.onload = () => {
-      const dataUrl = typeof reader.result === "string" ? reader.result : null;
-      updateBookingStatus(booking.id, "pending", dataUrl);
-      toast.success("Screenshot uploaded. We’ll verify and confirm shortly.");
-      setUploading(false);
-      onUpdated();
+      void (async () => {
+        const dataUrl = typeof reader.result === "string" ? reader.result : null;
+        if (!dataUrl) {
+          toast.error("Could not read that file.");
+          setUploading(false);
+          return;
+        }
+        try {
+          await uploadProofFn({
+            data: { id: booking.id, proofDataUrl: dataUrl },
+          });
+          toast.success("Screenshot uploaded. We’ll verify and confirm shortly.");
+          onUpdated();
+        } catch {
+          toast.error("Could not upload screenshot. Please try again.");
+        } finally {
+          setUploading(false);
+        }
+      })();
     };
     reader.onerror = () => {
       toast.error("Could not read that file.");
