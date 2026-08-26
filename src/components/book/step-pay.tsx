@@ -228,9 +228,9 @@ export function StepPay() {
             you can.
           </li>
           <li>
-            <span className="font-medium text-foreground/80">Professional services only:</span>{" "}
-            Therapeutic wellness massage only. Inappropriate requests will be
-            cancelled.
+            <span className="font-medium text-foreground/80">Wellness & relaxation services:</span>{" "}
+            Our sessions are offered for relaxation, personal wellness, and stress
+            relief. Services are provided in a professional, respectful environment.
           </li>
           <li>
             <span className="font-medium text-foreground/80">Privacy:</span>{" "}
