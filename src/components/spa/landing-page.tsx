@@ -15,6 +15,7 @@ import {
   policies,
   services,
   spa,
+  testimonials,
 } from "@/lib/spa-config";
 import { useBookingStore } from "@/lib/booking-store";
 import { cn } from "@/lib/utils";
@@ -96,6 +97,9 @@ export function LandingPage() {
             <p className="mt-2 text-sm text-muted-foreground">
               Start with our most popular options, or browse the full menu.
             </p>
+            <p className="mt-3 rounded-xl border border-champagne/20 bg-champagne/5 px-3.5 py-2.5 text-sm text-foreground/90">
+              {spa.firstTimeNote}
+            </p>
             <div className="mt-5 flex flex-col gap-3">
               {services.map((service) => (
                 <ServiceCard
@@ -119,6 +123,31 @@ export function LandingPage() {
             <div className="mt-4 space-y-3 text-base leading-relaxed text-foreground/85">
               {about.body.map((para) => (
                 <p key={para.slice(0, 24)}>{para}</p>
+              ))}
+            </div>
+          </section>
+
+          <div className="hairline" />
+
+          {/* Testimonials */}
+          <section className="py-8" id="testimonials">
+            <p className="section-label">Client notes</p>
+            <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
+              What guests say
+            </h2>
+            <div className="mt-5 space-y-4">
+              {testimonials.map((t) => (
+                <blockquote
+                  key={t.name}
+                  className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                >
+                  <p className="text-sm leading-relaxed text-foreground/90">
+                    “{t.quote}”
+                  </p>
+                  <footer className="mt-2 text-xs text-muted-foreground">
+                    — {t.name}
+                  </footer>
+                </blockquote>
               ))}
             </div>
           </section>
