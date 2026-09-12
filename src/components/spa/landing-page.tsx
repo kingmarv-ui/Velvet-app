@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/button";
 import {
   about,
   contact,
+  faq,
   hours,
+  howItWorks,
   policies,
   services,
   spa,
@@ -27,7 +29,8 @@ export function LandingPage() {
       <div className={cn(selectedCount > 0 && "pb-24")}>
         <SiteHeader />
         <main className="narrow px-5">
-          <section className="stagger-in pt-8 pb-12 text-center">
+          {/* Hero */}
+          <section className="stagger-in pt-8 pb-10 text-center">
             <div className="relative mx-auto max-w-md">
               <div
                 className="absolute inset-0 -z-10 rounded-full opacity-40 blur-3xl"
@@ -41,25 +44,73 @@ export function LandingPage() {
 
             <p className="section-label mt-8">Private massage & wellness</p>
             <h1 className="mt-3 font-serif text-3xl font-medium tracking-tight text-plum-deep sm:text-4xl">
-              {spa.wordmark}
+              {spa.heroHeadline}
             </h1>
-            <p className="mx-auto mt-2 max-w-xs text-base leading-relaxed text-muted-foreground">
-              {spa.tagline}
-            </p>
-            <p className="mx-auto mt-1 text-[0.7rem] font-medium tracking-[0.28em] uppercase text-champagne/80">
-              {spa.subtitle}
-            </p>
-            <p className="mx-auto mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Select your preferred massage, choose an available appointment
-              time, and securely complete your booking.
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">
+              {spa.heroSubtext}
             </p>
             <Button asChild size="lg" className="mt-7 min-w-40">
               <Link to="/book">Book Your Private Massage</Link>
             </Button>
+            <p className="mx-auto mt-4 max-w-md text-xs leading-relaxed text-champagne/90">
+              {spa.trustBar}
+            </p>
           </section>
 
           <div className="hairline" />
 
+          {/* How it works */}
+          <section className="py-8" id="how-it-works">
+            <p className="section-label">How it works</p>
+            <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
+              Simple booking in three steps
+            </h2>
+            <ol className="mt-5 space-y-4">
+              {howItWorks.map((step, i) => (
+                <li key={step.title} className="flex gap-3">
+                  <span className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full bg-champagne/15 text-sm font-medium text-champagne">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p className="font-medium text-foreground">{step.title}</p>
+                    <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">
+                      {step.body}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-5 text-sm text-muted-foreground">
+              Every session is private, unhurried, and focused entirely on you.
+            </p>
+          </section>
+
+          <div className="hairline" />
+
+          {/* Featured / All services */}
+          <section className="py-8" id="services">
+            <p className="section-label">Treatments</p>
+            <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
+              Choose your experience
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Start with our most popular options, or browse the full menu.
+            </p>
+            <div className="mt-5 flex flex-col gap-3">
+              {services.map((service) => (
+                <ServiceCard
+                  key={service.id}
+                  service={service}
+                  selected={selectedIds.includes(service.id)}
+                  onSelect={() => selectService(service.id)}
+                />
+              ))}
+            </div>
+          </section>
+
+          <div className="hairline" />
+
+          {/* About */}
           <section className="py-8" id="about">
             <p className="section-label">About</p>
             <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
@@ -74,6 +125,27 @@ export function LandingPage() {
 
           <div className="hairline" />
 
+          {/* FAQ */}
+          <section className="py-8" id="faq">
+            <p className="section-label">Common questions</p>
+            <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
+              FAQ
+            </h2>
+            <div className="mt-5 space-y-4">
+              {faq.map((item) => (
+                <div key={item.question}>
+                  <p className="font-medium text-foreground">{item.question}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {item.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <div className="hairline" />
+
+          {/* Policies */}
           <section className="py-8" id="policies">
             <p className="section-label">Policy & terms</p>
             <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
@@ -85,12 +157,17 @@ export function LandingPage() {
               preview={
                 <ol className="space-y-3">
                   {policies.slice(0, 3).map((item, i) => (
-                    <li key={item.title} className="flex gap-3 text-sm leading-relaxed">
+                    <li
+                      key={item.title}
+                      className="flex gap-3 text-sm leading-relaxed"
+                    >
                       <span className="mt-0.5 w-5 shrink-0 font-medium tabular-nums text-champagne">
                         {i + 1}.
                       </span>
                       <span>
-                        <span className="font-medium text-foreground">{item.title}. </span>
+                        <span className="font-medium text-foreground">
+                          {item.title}.{" "}
+                        </span>
                         <span className="text-muted-foreground">{item.body}</span>
                       </span>
                     </li>
@@ -100,12 +177,17 @@ export function LandingPage() {
             >
               <ol className="mt-3 space-y-3" start={4}>
                 {policies.slice(3).map((item, i) => (
-                  <li key={item.title} className="flex gap-3 text-sm leading-relaxed">
+                  <li
+                    key={item.title}
+                    className="flex gap-3 text-sm leading-relaxed"
+                  >
                     <span className="mt-0.5 w-5 shrink-0 font-medium tabular-nums text-champagne">
                       {i + 4}.
                     </span>
                     <span>
-                      <span className="font-medium text-foreground">{item.title}. </span>
+                      <span className="font-medium text-foreground">
+                        {item.title}.{" "}
+                      </span>
                       <span className="text-muted-foreground">{item.body}</span>
                     </span>
                   </li>
@@ -116,6 +198,7 @@ export function LandingPage() {
 
           <div className="hairline" />
 
+          {/* Contact */}
           <section className="py-8" id="contact">
             <p className="section-label">Contact</p>
             <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
@@ -154,6 +237,7 @@ export function LandingPage() {
 
           <div className="hairline" />
 
+          {/* Hours */}
           <section className="py-8" id="hours">
             <p className="section-label">Hours</p>
             <h2 className="mt-2 flex items-center gap-2 font-serif text-2xl font-semibold text-plum-deep">
@@ -171,33 +255,26 @@ export function LandingPage() {
                 >
                   <span className="text-foreground">{row.day}</span>
                   <span className="tabular-nums text-muted-foreground">
-                    {row.open && row.close ? `${row.open} – ${row.close}` : "Closed"}
+                    {row.open && row.close
+                      ? `${row.open} – ${row.close}`
+                      : "Closed"}
                   </span>
                 </li>
               ))}
             </ul>
           </section>
 
-          <div className="hairline" />
-
-          <section className="py-8" id="services">
-            <p className="section-label">All services</p>
-            <h2 className="mt-2 font-serif text-2xl font-semibold text-plum-deep">
-              Treatments
+          {/* Final CTA */}
+          <section className="py-10 text-center">
+            <h2 className="font-serif text-2xl font-semibold text-plum-deep">
+              Ready to unwind?
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Choose a treatment below, or start the full booking flow.
+            <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+              Book your private session in a few simple steps.
             </p>
-            <div className="mt-5 flex flex-col gap-3">
-              {services.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  service={service}
-                  selected={selectedIds.includes(service.id)}
-                  onSelect={() => selectService(service.id)}
-                />
-              ))}
-            </div>
+            <Button asChild size="lg" className="mt-5 min-w-40">
+              <Link to="/book">Book Your Private Massage</Link>
+            </Button>
           </section>
         </main>
         <SiteFooter />
@@ -208,7 +285,8 @@ export function LandingPage() {
           <div className="narrow flex items-center justify-between gap-3 px-5 py-3">
             <div className="min-w-0">
               <p className="text-sm font-medium text-plum-deep">
-                {selectedCount} {selectedCount === 1 ? "service" : "services"} selected
+                {selectedCount}{" "}
+                {selectedCount === 1 ? "service" : "services"} selected
               </p>
               <p className="truncate text-xs text-muted-foreground">
                 {selectedIds

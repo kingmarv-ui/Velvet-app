@@ -8,6 +8,11 @@ export const spa = {
   wordmark: "Velvet Moon",
   tagline: "Relax. Unwind. Feel renewed.",
   subtitle: "Massage & Wellness",
+  heroHeadline: "Private Massage in a Calm, Unhurried Setting",
+  heroSubtext:
+    "Select your preferred massage, choose a time, and secure your booking with a simple 50% deposit.",
+  trustBar:
+    "Private sessions · 50% deposit holds your time · 24-hour flexible rescheduling · Fully discreet",
   timezoneLabel: "Eastern Time",
   depositPercent: 50,
   bookingLeadHours: 2,
@@ -26,6 +31,44 @@ export const about = {
     "Every session is designed to feel private, professional, and deeply restorative. Book in advance, arrive as you are, and leave lighter.",
   ],
 };
+
+export const howItWorks = [
+  {
+    title: "Choose your massage",
+    body: "Select the experience that suits you — from our Signature relaxation to longer private sessions.",
+  },
+  {
+    title: "Pick a time",
+    body: "Choose a date and time that works for you. We’ll hold it once your deposit is received.",
+  },
+  {
+    title: "Secure your booking",
+    body: "Pay a simple 50% deposit online. The remaining balance is due at the start of your appointment.",
+  },
+];
+
+export const faq = [
+  {
+    question: "Is the session completely private?",
+    answer:
+      "Yes. Every appointment is private and discreet. You will not be interrupted.",
+  },
+  {
+    question: "How does the deposit work?",
+    answer:
+      "A 50% deposit is required to hold your preferred time. It is applied in full toward your treatment. The remaining balance is paid at the start of your appointment.",
+  },
+  {
+    question: "What is your cancellation policy?",
+    answer:
+      "Please give at least 24 hours’ notice to cancel or reschedule. With 24 or more hours’ notice, we can move your deposit to a new date (or refund it when practical). Cancellations with less than 24 hours’ notice or missed appointments are generally non-refundable. Genuine emergencies are considered case by case.",
+  },
+  {
+    question: "What should I expect?",
+    answer:
+      "Arrive about 10 minutes early so we can settle you in. Sessions are calm, professional, and paced to your body rather than the clock. Please let us know in advance about any injuries, allergies, or conditions we should be aware of.",
+  },
+];
 
 export const contact = {
   phone: {
@@ -118,7 +161,8 @@ export const services: Service[] = [
   {
     id: "velvet-signature",
     name: "Velvet Signature Massage",
-    description: "Relaxation-focused personalized massage.",
+    description:
+      "Our most popular choice. A personalized relaxation massage focused on melting tension and leaving you deeply restored. Ideal for first-time guests.",
     durationMin: 60,
     price: 100,
     featured: true,
@@ -126,35 +170,40 @@ export const services: Service[] = [
   {
     id: "luxe-touch",
     name: "Luxe Touch Massage",
-    description: "Premium full-body relaxation with customized attention.",
+    description:
+      "Premium full-body relaxation with customized pressure and extra attention to the areas that need it most.",
     durationMin: 60,
     price: 150,
   },
   {
     id: "signature-full-body",
     name: "Signature Full-Body Massage",
-    description: "Comprehensive full-body massage experience.",
+    description:
+      "A comprehensive full-body experience designed for deeper release and lasting calm.",
     durationMin: 60,
     price: 250,
   },
   {
     id: "private-luxe-retreat",
     name: "Private Luxe Retreat",
-    description: "Elevated private massage with personalized attention.",
+    description:
+      "An elevated private session with refined technique and a more luxurious pace.",
     durationMin: 60,
     price: 400,
   },
   {
     id: "premium-sensation",
     name: "Premium Sensation Massage",
-    description: "Premium customized massage and relaxation experience.",
+    description:
+      "Highly customized massage focused on refined sensation and complete mental + physical reset.",
     durationMin: 60,
     price: 500,
   },
   {
     id: "executive-private",
     name: "Executive Private Massage",
-    description: "An extended, highly personalized private massage experience.",
+    description:
+      "Extended, highly personalized private massage for those who want the fullest experience.",
     durationMin: 120,
     price: 750,
   },
