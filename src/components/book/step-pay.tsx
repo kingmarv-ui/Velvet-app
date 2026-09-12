@@ -63,8 +63,9 @@ export function StepPay() {
           Review & pay
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          A {spa.depositPercent}% deposit holds your time. After you send
-          payment, upload a screenshot so we can confirm your appointment.
+          Pay {spa.depositPercent}% now to hold your time. The remaining balance
+          is due at the start of your appointment. After you send payment,
+          upload a screenshot so we can confirm.
         </p>
       </div>
 
@@ -116,6 +117,14 @@ export function StepPay() {
             Remaining {formatPrice(remainder)} is due at your appointment.
           </p>
         ) : null}
+        <p className="mt-3 rounded-xl border border-champagne/20 bg-champagne/5 px-3.5 py-2.5 text-sm text-foreground/90">
+          <span className="font-medium text-plum-deep">
+            Pay {spa.depositPercent}% now to hold your time.
+          </span>{" "}
+          <span className="text-muted-foreground">
+            Remaining balance is due at the start of your appointment.
+          </span>
+        </p>
       </section>
 
       <section>

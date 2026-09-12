@@ -13,6 +13,8 @@ export const spa = {
     "Select your preferred massage, choose a time, and secure your booking with a simple 50% deposit.",
   trustBar:
     "Private sessions · 50% deposit holds your time · 24-hour flexible rescheduling · Fully discreet",
+  firstTimeNote:
+    "New here? The Signature is a gentle, popular place to start — fully private and paced to you.",
   timezoneLabel: "Eastern Time",
   depositPercent: 50,
   bookingLeadHours: 2,
@@ -67,6 +69,25 @@ export const faq = [
     question: "What should I expect?",
     answer:
       "Arrive about 10 minutes early so we can settle you in. Sessions are calm, professional, and paced to your body rather than the clock. Please let us know in advance about any injuries, allergies, or conditions we should be aware of.",
+  },
+];
+
+/** Short client notes — replace with real testimonials when you have them. */
+export const testimonials = [
+  {
+    quote:
+      "Exactly what I needed — private, calm, and no rush. I left feeling completely reset.",
+    name: "A.M.",
+  },
+  {
+    quote:
+      "Professional from booking to the end of the session. The space felt safe and unhurried.",
+    name: "J.R.",
+  },
+  {
+    quote:
+      "First time booking a private massage online and the whole process was clear and respectful.",
+    name: "S.K.",
   },
 ];
 

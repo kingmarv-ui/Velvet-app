@@ -56,6 +56,10 @@ export function StepSchedule() {
           Select a date, arrival time, duration, and whether we host you or come
           to you. Times in {spa.timezoneLabel}.
         </p>
+        <p className="mt-2 text-xs leading-relaxed text-champagne/90">
+          Most guests prefer mornings or early evenings — choose whatever feels
+          right for you.
+        </p>
       </div>
 
       <section>
