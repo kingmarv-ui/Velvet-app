@@ -20,6 +20,7 @@ export const Route = createRootRoute({
           "Velvet Moon Wellness — private massage & wellness. Relax. Unwind. Feel renewed.",
       },
       { name: "theme-color", content: "#100e12" },
+      { name: "pst-verify", content: "4ZsfOjNpF5iFR72p" },
       { property: "og:title", content: "Velvet Moon Wellness" },
       {
         property: "og:description",
@@ -45,6 +46,7 @@ export const Route = createRootRoute({
   component: () => (
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <head>
+        <meta name="pst-verify" content="4ZsfOjNpF5iFR72p" />
         <HeadContent />
       </head>
       <body>
