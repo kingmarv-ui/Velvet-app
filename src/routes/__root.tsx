@@ -5,32 +5,32 @@ import { Toaster } from "sonner";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import appCss from "../styles.css?url";
 import { FAVICON_PNG_SRC } from "@/lib/brand-assets";
+import { businessJsonLd, defaultDescription, SITE_URL } from "@/lib/seo";
 
 const APP_NAME = "Velvet Moon Wellness";
+const jsonLd = JSON.stringify(businessJsonLd());
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: APP_NAME },
-      {
-        name: "description",
-        content:
-          "Velvet Moon Wellness — private massage & wellness. Relax. Unwind. Feel renewed.",
-      },
+      { title: `Private Massage in Texas | ${APP_NAME}` },
+      { name: "description", content: defaultDescription },
       { name: "theme-color", content: "#100e12" },
       { name: "pst-verify", content: "4ZsfOjNpF5iFR72p" },
-      { property: "og:title", content: "Velvet Moon Wellness" },
-      {
-        property: "og:description",
-        content: "Private massage & wellness. Relax. Unwind. Feel renewed.",
-      },
-      { property: "og:image", content: "/og.jpg" },
+      { name: "geo.region", content: "US-TX" },
+      { name: "geo.placename", content: "Texas" },
+      { property: "og:title", content: `Private Massage in Texas | ${APP_NAME}` },
+      { property: "og:description", content: defaultDescription },
+      { property: "og:image", content: `${SITE_URL}/og.jpg` },
+      { property: "og:url", content: SITE_URL },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
+      { rel: "canonical", href: SITE_URL },
       { rel: "icon", type: "image/png", sizes: "32x32", href: FAVICON_PNG_SRC },
       { rel: "apple-touch-icon", href: FAVICON_PNG_SRC },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -47,6 +47,7 @@ export const Route = createRootRoute({
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <head>
         <meta name="pst-verify" content="4ZsfOjNpF5iFR72p" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
         <HeadContent />
       </head>
       <body>
