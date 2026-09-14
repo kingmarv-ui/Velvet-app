@@ -13,6 +13,12 @@ export function SiteFooter() {
             <p className="text-sm text-muted-foreground">{spa.tagline}</p>
           </div>
         </div>
+        <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+          {spa.serviceAreaLine}
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {contact.phone.display} · {contact.email.display}
+        </p>
         <nav className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm">
           <Link to="/" className="text-foreground/60 transition-colors hover:text-champagne">
             Home
@@ -38,7 +44,7 @@ export function SiteFooter() {
         </nav>
         <p className="mt-8 text-xs text-muted-foreground">
           © {new Date().getFullYear()} {spa.name}. All treatments are professional
-          wellness services.
+          wellness services. Serving Texas and nearby areas.
         </p>
       </div>
     </footer>
