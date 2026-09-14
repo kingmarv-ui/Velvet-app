@@ -18,6 +18,9 @@ export const Route = createFileRoute("/confirmed")({
     id: typeof raw.id === "string" ? raw.id : "",
   }),
   component: ConfirmedPage,
+  head: () => ({
+    meta: [{ name: "robots", content: "noindex, nofollow" }],
+  }),
 });
 
 function ConfirmedPage() {
@@ -145,9 +148,9 @@ function PendingCard({
   }
 
   const waMsg = encodeURIComponent(
-    `Hello Velvetmoon Spa 👋\n\nI just completed my booking online.\n\nService: ${booking.services.map((s) => s.name).join(", ")}\nDate: ${when}\nTime: ${formatTimeDisplay(booking.time)}\nAmount: ${formatPrice(booking.paid)}\n\nI will love to send the payment via Zelle / Cash App / Venmo / PayPal / Apple Giftcard shortly.\n\nPlease confirm once received. Thank you!`,
+    `Hello Velvet Moon Wellness \n\nI just completed my booking online.\n\nService: ${booking.services.map((s) => s.name).join(", ")}\nDate: ${when}\nTime: ${formatTimeDisplay(booking.time)}\nAmount: ${formatPrice(booking.paid)}\n\nI will love to send the payment via Zelle / Cash App / Venmo / PayPal / Apple Giftcard shortly.\n\nPlease confirm once received. Thank you!`,
   );
-  const waUrl = `https://wa.me/14246662911?text=${waMsg}`;
+  const waUrl = `https://wa.me/${contact.whatsapp.e164}?text=${waMsg}`;
 
   return (
     <div className="text-center">
