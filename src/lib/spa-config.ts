@@ -101,12 +101,13 @@ export const testimonials = [
 
 export const contact = {
   phone: {
-    display: "+1 (424) 666-2911",
-    tel: "+14246662911",
+    display: "+1 (440) 544-5757",
+    tel: "+14405445757",
   },
   whatsapp: {
     display: "WhatsApp",
-    url: "https://wa.me/14246662911?text=Hello%2C%20I%20want%20to%20book%20a%20spa%20appointment",
+    e164: "14405445757",
+    url: "https://wa.me/14405445757?text=Hello%2C%20I%20want%20to%20book%20a%20spa%20appointment",
   },
   email: {
     display: "bookings@velvetmoonspa.com",
