@@ -3,18 +3,23 @@ import { MoonMark } from "@/components/spa/moon-mark";
 import { SiteFooter } from "@/components/spa/site-footer";
 import { Button } from "@/components/ui/button";
 import { policies, spa } from "@/lib/spa-config";
+import { SITE_URL } from "@/lib/seo";
+
+const title = `Booking Policy, Deposit & Cancellation | ${spa.name}`;
+const description =
+  "Velvet Moon Wellness booking, 50% deposit, and 24-hour cancellation policy for private massage appointments in Texas and nearby areas.";
 
 export const Route = createFileRoute("/policies")({
   component: PoliciesPage,
   head: () => ({
     meta: [
-      { title: `Booking Policies — ${spa.name}` },
-      {
-        name: "description",
-        content:
-          "Booking, deposit, and cancellation policies for Velvet Moon Wellness.",
-      },
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url", content: `${SITE_URL}/policies` },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/policies` }],
   }),
 });
 
