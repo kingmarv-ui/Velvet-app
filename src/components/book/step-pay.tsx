@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { format, parseISO } from "date-fns";
 import { Check, Copy, Landmark, Smartphone } from "lucide-react";
 import { toast } from "sonner";
-import { bankTransfer, spa } from "@/lib/spa-config";
+import { bankTransfer, contact, spa } from "@/lib/spa-config";
 import { bookingTotals, useBookingStore } from "@/lib/booking-store";
 import { cn, formatDuration, formatPrice, formatTimeDisplay } from "@/lib/utils";
 
@@ -53,7 +53,7 @@ export function StepPay() {
     const text = encodeURIComponent(
       `Hello Velvet Moon Wellness 👋\n\nI just completed my booking online.\n\nService: ${serviceName}\nDate: ${dateStr}\nTime: ${timeStr}\nAmount: ${formatPrice(dueNow)}\n\nI will love to send the payment via Zelle / Cash App / Venmo / PayPal / Apple Giftcard shortly.\n\nPlease confirm once received. Thank you!`,
     );
-    return `https://wa.me/14246662911?text=${text}`;
+    return `https://wa.me/${contact.whatsapp.e164}?text=${text}`;
   })();
 
   return (
