@@ -8,13 +8,16 @@ export const spa = {
   wordmark: "Velvet Moon",
   tagline: "Relax. Unwind. Feel renewed.",
   subtitle: "Massage & Wellness",
-  heroHeadline: "Private Massage in a Calm, Unhurried Setting",
+  heroHeadline: "Private Massage in Texas",
   heroSubtext:
-    "Select your preferred massage, choose a time, and secure your booking with a simple 50% deposit.",
+    "Serving Texas and surrounding areas within about two hours. Select your massage, choose a time, and hold it with a simple 50% deposit.",
   trustBar:
-    "Private sessions · 50% deposit holds your time · 24-hour flexible rescheduling · Fully discreet",
+    "Texas & nearby · Private sessions · 50% deposit holds your time · 24-hour flexible rescheduling",
   firstTimeNote:
     "New here? The Signature is a gentle, popular place to start — fully private and paced to you.",
+  serviceAreaLine:
+    "We serve Texas and surrounding areas within about a two-hour radius. Incall and outcall are available — tell us where you are when you book.",
+  serviceArea: ["Texas", "Oklahoma", "Arkansas", "Louisiana", "New Mexico"],
   timezoneLabel: "Eastern Time",
   depositPercent: 50,
   bookingLeadHours: 2,
@@ -29,8 +32,8 @@ export const spa = {
 export const about = {
   headline: "A quieter kind of luxury",
   body: [
-    "Velvet Moon Wellness is a sanctuary for unhurried care. Our therapists blend classical technique with a quietly luxurious touch — warm rooms, considered products, and treatments paced to your body rather than the clock.",
-    "Every session is designed to feel private, professional, and deeply restorative. Book in advance, arrive as you are, and leave lighter.",
+    "Velvet Moon Wellness is a private massage practice serving Texas and surrounding areas within about two hours. Our therapists blend classical technique with a quietly luxurious touch — warm rooms, considered products, and treatments paced to your body rather than the clock.",
+    "Every session is designed to feel private, professional, and deeply restorative. Book in advance, arrive as you are, and leave lighter. Incall and outcall appointments are available.",
   ],
 };
 
@@ -41,7 +44,7 @@ export const howItWorks = [
   },
   {
     title: "Pick a time",
-    body: "Choose a date and time that works for you. We’ll hold it once your deposit is received.",
+    body: "Choose a date and time that works for you. We’ll hold it once your deposit is received. Times are shown in Eastern Time.",
   },
   {
     title: "Secure your booking",
@@ -54,6 +57,11 @@ export const faq = [
     question: "Is the session completely private?",
     answer:
       "Yes. Every appointment is private and discreet. You will not be interrupted.",
+  },
+  {
+    question: "Where do you serve?",
+    answer:
+      "We serve Texas and surrounding areas within about a two-hour radius. Incall and outcall are available — tell us where you are when you book.",
   },
   {
     question: "How does the deposit work?",
