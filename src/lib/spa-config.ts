@@ -192,50 +192,86 @@ export const services: Service[] = [
     id: "velvet-signature",
     name: "Velvet Signature Massage",
     description:
-      "Our most popular choice. A personalized relaxation massage focused on melting tension and leaving you deeply restored. Ideal for first-time guests.",
+      "A personalized relaxation massage designed to ease tension and create a calm, intimate atmosphere.",
     durationMin: 60,
-    price: 100,
+    price: 120, // was $150 · 20% off
     featured: true,
+    highlights: [
+      "Gentle full-body relaxation",
+      "Stress and tension relief",
+      "Soothing touch and calming ambiance",
+      "Enhanced sense of comfort and connection",
+    ],
   },
   {
     id: "luxe-touch",
     name: "Luxe Touch Massage",
     description:
-      "Premium full-body relaxation with customized pressure and extra attention to the areas that need it most.",
+      "A refined massage experience combining flowing techniques with focused attention and a warm, inviting atmosphere.",
     durationMin: 60,
-    price: 150,
+    price: 160, // was $200 · 20% off
+    highlights: [
+      "Relaxing full-body massage",
+      "Focused muscle tension release",
+      "Sensory relaxation",
+      "Playful, flirtatious atmosphere",
+    ],
   },
   {
     id: "signature-full-body",
     name: "Signature Full-Body Massage",
     description:
-      "A comprehensive full-body experience designed for deeper release and lasting calm.",
+      "A comprehensive massage designed to provide balanced attention throughout the body while creating a luxurious, intimate experience.",
     durationMin: 60,
-    price: 250,
+    price: 200, // was $250 · 20% off
+    highlights: [
+      "Full-body relaxation",
+      "Targeted tension relief",
+      "Personalized massage pressure",
+      "Heightened sensory relaxation and chemistry",
+    ],
   },
   {
     id: "private-luxe-retreat",
     name: "Private Luxe Retreat",
     description:
-      "An elevated private session with refined technique and a more luxurious pace.",
+      "An elevated private massage experience with customized attention, tranquil surroundings, and an indulgent atmosphere.",
     durationMin: 60,
-    price: 400,
+    price: 240, // was $300 · 20% off
+    highlights: [
+      "Personalized bodywork",
+      "Deep relaxation",
+      "Romantic and sensual ambiance",
+      "Increased comfort, confidence, and connection",
+    ],
   },
   {
     id: "premium-sensation",
     name: "Premium Sensation Massage",
     description:
-      "Highly customized massage focused on refined sensation and complete mental + physical reset.",
+      "Our premium massage experience combines tailored bodywork, luxurious surroundings, and attentive personal service.",
     durationMin: 60,
-    price: 500,
+    price: 320, // was $400 · 20% off
+    highlights: [
+      "Bespoke massage techniques",
+      "Total-body relaxation",
+      "Enhanced sensory experience",
+      "Flirty, intimate atmosphere",
+    ],
   },
   {
     id: "executive-private",
     name: "Executive Private Massage",
     description:
-      "Extended, highly personalized private massage for those who want the fullest experience.",
+      "Our signature private experience offers highly personalized massage, extended relaxation, and an exclusive atmosphere tailored to the individual.",
     durationMin: 120,
-    price: 750,
+    price: 600, // was $750 · 20% off
+    highlights: [
+      "Bespoke massage experience",
+      "Extended relaxation and recovery",
+      "Personalized attention throughout",
+      "Elevated intimacy, chemistry, and sensory relaxation",
+    ],
   },
 ];
 
